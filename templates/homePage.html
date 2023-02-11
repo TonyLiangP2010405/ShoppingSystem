@@ -10,6 +10,7 @@
         <button><a href="{% url 'logout' %}">logout</a></button>
         <button><a href="{% url 'change_password' %}">change password</a></button>
         <button><a href="{% url 'user_products' %}">user check products</a></button>
+        <button><a href="{% url 'add_shipping_address' %}">user add shipping address</a></button>
         {% if request.user.is_superuser %}
             <button><a href="{% url 'add_product' %}">add product</a></button>
             <button><a href="{% url 'products' %}">vendor check products</a></button>

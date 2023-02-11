@@ -54,4 +54,13 @@ class ShippingAddressInfo(forms.ModelForm):
         error_messages = {
             "receiver_name": {'required': 'the receiver name cannot be empty',
                               'max_length': 'the max length of receiver name is 50'},
+            "receiver_province": {'required': 'the receiver province cannot be empty',
+                                  'max_length': 'the max length of receiver province is 100'},
+            "receiver_city": {'required': 'the city of receiver cannot be empty',
+                              'max_length': 'the max length of receiver is 100'},
+            "receiver_district": {'required': 'the district of receiver cannot be empty',
+                                  'max_length': 'the max length of receiver district is 100'},
+            "receiver_address": {'required': 'the address of receiver cannot be empty',
+                                 'max_length': 'the max length of receiver address is 100'},
+            "receiver_zip": {'required': 'the zip of receiver address cannot be empty'}
         }

@@ -1,26 +1,31 @@
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
+
+from apps.basic.models import ShippingAddress
 from apps.users.forms import UserRegForm, UserChangePasswordForm
 from apps.users.models import MyUser
 from django.contrib.auth.hashers import make_password
+from apps.basic.forms import ShippingAddressInfo
 
 
 # Create your views here.
 def user_register(request):
     if request.method == "GET":
         form_obj = UserRegForm()
-        return render(request, 'user_register.html', {'form_obj': form_obj})
+        form_obj2 = ShippingAddressInfo()
+        return render(request, 'user_register.html', {'form_obj': form_obj, 'form_obj2': form_obj2})
     if request.method == "POST":
         form_obj = UserRegForm(request.POST, request.FILES)
-        if form_obj.is_valid():
+        form_obj2 = ShippingAddressInfo(request.POST, request.FILES)
+        if form_obj.is_valid() and form_obj2.is_valid():
             uname = request.POST.get("username", '')
             users = MyUser.objects.filter(username=uname)
             email = request.POST.get("email", '')
             password = request.POST.get("password", '')
             if users:
                 info = 'the user has been existed'
-                return render(request, 'user_register.html', {"form_obj": form_obj, "info": info})
+                return render(request, 'user_register.html', {"form_obj": form_obj, 'form_obj2': form_obj2, "info": info})
             else:
                 form_obj.cleaned_data["username"] = uname
                 form_obj.cleaned_data["email"] = email
@@ -29,13 +34,35 @@ def user_register(request):
                 form_obj.cleaned_data["is_superuser"] = 0
                 # new user
                 MyUser.objects.create_user(**form_obj.cleaned_data)
+                form_obj2 = ShippingAddressInfo(request.POST, request.FILES)
+                shipping_address_dict = {}
+                receiver_name = request.POST.get("receiver_name", '')
+                receiver_phone = request.POST.get("receiver_phone", '')
+                receiver_mobile = request.POST.get("receiver_mobile", '')
+                receiver_province = request.POST.get("receiver_province", '')
+                receiver_city = request.POST.get("receiver_city", '')
+                receiver_district = request.POST.get("receiver_district", '')
+                receiver_address = request.POST.get("receiver_address", '')
+                receiver_zip = request.POST.get("receiver_zip", '')
+                shipping_address_dict["receiver_name"] = receiver_name
+                shipping_address_dict["receiver_phone"] = receiver_phone
+                shipping_address_dict["receiver_mobile"] = receiver_mobile
+                shipping_address_dict["receiver_province"] = receiver_province
+                shipping_address_dict["receiver_city"] = receiver_city
+                shipping_address_dict["receiver_district"] = receiver_district
+                shipping_address_dict["receiver_address"] = receiver_address
+                shipping_address_dict["receiver_zip"] = receiver_zip
                 user_login = authenticate(username=uname, password=password)
                 login(request, user_login)
+                user = request.user
+                shipping_address_dict["user"] = user
+                ShippingAddress.objects.create(**shipping_address_dict)
                 return redirect("homePage")
         else:
             errors = form_obj.errors
             print(errors)
-            return render(request, "user_register.html", {'form_obj': form_obj, 'errors': errors})
+            return render(request, "user_register.html",
+                          {'form_obj': form_obj, 'form_obj2': form_obj2, 'errors': errors})
 
 
 def user_login(request):
