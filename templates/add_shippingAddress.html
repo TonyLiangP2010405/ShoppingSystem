@@ -1,69 +1,68 @@
+{% extends 'base.html' %}
 {% load static %}
-<head>
-    <link rel="stylesheet" href="{% static 'plugins/bootstrap/css/bootstrap.css' %}">
-    <title>add shipping address</title>
-</head>
-<body>
-    <form novalidate action="" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="mb-3 mt-3">
-            <label for="{{ form_obj.receiver_name.id_for_label }}" class="form-label">{{ form_obj.receiver_name.label }}</label>
-            <div class="col-sm-offset-10">
-                {{ form_obj.receiver_name }}
-                <span class="help-block">{{ form_obj.errors.receiver_name.0 }}</span>
+{% block content %}
+    <div>
+        <form novalidate action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.receiver_name.id_for_label }}" class="form-label">{{ form_obj.receiver_name.label }}</label>
+                <div class="col-sm-offset-10">
+                    {{ form_obj.receiver_name }}
+                    <span class="help-block">{{ form_obj.errors.receiver_name.0 }}</span>
+                </div>
             </div>
-        </div>
-        <div class="mb-3 mt-3">
-            <label for="{{ form_obj.receiver_phone.id_for_label }}" class="form-label">{{ form_obj.receiver_phone.label }}</label>
-            <div class="col-sm-offset-10">
-                {{ form_obj.receiver_phone }}
-                <span class="help-block">{{ form_obj.errors.receiver_phone.0 }}</span>
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.receiver_phone.id_for_label }}" class="form-label">{{ form_obj.receiver_phone.label }}</label>
+                <div class="col-sm-offset-10">
+                    {{ form_obj.receiver_phone }}
+                    <span class="help-block">{{ form_obj.errors.receiver_phone.0 }}</span>
+                </div>
             </div>
-        </div>
-        <div class="mb-3 mt-3">
-            <label for="{{ form_obj.receiver_mobile.id_for_label }}" class="form-label">{{ form_obj.receiver_mobile.label }}</label>
-            <div class="col-sm-offset-10">
-                {{ form_obj.receiver_mobile }}
-                <span class="help-block">{{ form_obj.errors.receiver_mobile.0 }}</span>
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.receiver_mobile.id_for_label }}" class="form-label">{{ form_obj.receiver_mobile.label }}</label>
+                <div class="col-sm-offset-10">
+                    {{ form_obj.receiver_mobile }}
+                    <span class="help-block">{{ form_obj.errors.receiver_mobile.0 }}</span>
+                </div>
             </div>
-        </div>
-        <div class="mb-3 mt-3">
-            <label for="{{ form_obj.receiver_province.id_for_label }}" class="form-label">{{ form_obj.receiver_province.label }}</label>
-            <div class="col-sm-offset-10">
-                {{ form_obj.receiver_province }}
-                <span class="help-block">{{ form_obj.errors.receiver_province.0 }}</span>
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.receiver_province.id_for_label }}" class="form-label">{{ form_obj.receiver_province.label }}</label>
+                <div class="col-sm-offset-10">
+                    {{ form_obj.receiver_province }}
+                    <span class="help-block">{{ form_obj.errors.receiver_province.0 }}</span>
+                </div>
             </div>
-        </div>
-        <div class="mb-3 mt-3">
-            <label for="{{ form_obj.receiver_city.id_for_label }}" class="form-label">{{ form_obj.receiver_city.label }}</label>
-            <div class="col-sm-offset-10">
-                {{ form_obj.receiver_city }}
-                <span class="help-block">{{ form_obj.errors.receiver_city.0 }}</span>
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.receiver_city.id_for_label }}" class="form-label">{{ form_obj.receiver_city.label }}</label>
+                <div class="col-sm-offset-10">
+                    {{ form_obj.receiver_city }}
+                    <span class="help-block">{{ form_obj.errors.receiver_city.0 }}</span>
+                </div>
             </div>
-        </div>
-        <div class="mb-3 mt-3">
-            <label for="{{ form_obj.receiver_district.id_for_label }}" class="form-label">{{ form_obj.receiver_district.label }}</label>
-            <div class="col-sm-offset-10">
-                {{ form_obj.receiver_district }}
-                <span class="help-block">{{ form_obj.errors.receiver_district.0 }}</span>
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.receiver_district.id_for_label }}" class="form-label">{{ form_obj.receiver_district.label }}</label>
+                <div class="col-sm-offset-10">
+                    {{ form_obj.receiver_district }}
+                    <span class="help-block">{{ form_obj.errors.receiver_district.0 }}</span>
+                </div>
             </div>
-        </div>
-        <div class="mb-3 mt-3">
-            <label for="{{ form_obj.receiver_address.id_for_label }}" class="form-label">{{ form_obj.receiver_address.label }}</label>
-            <div class="col-sm-offset-10">
-                {{ form_obj.receiver_address }}
-                <span class="help-block">{{ form_obj.errors.receiver_address.0 }}</span>
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.receiver_address.id_for_label }}" class="form-label">{{ form_obj.receiver_address.label }}</label>
+                <div class="col-sm-offset-10">
+                    {{ form_obj.receiver_address }}
+                    <span class="help-block">{{ form_obj.errors.receiver_address.0 }}</span>
+                </div>
             </div>
-        </div>
-        <div class="mb-3 mt-3">
-            <label for="{{ form_obj.receiver_zip.id_for_label }}" class="form-label">{{ form_obj.receiver_zip.label }}</label>
-            <div class="col-sm-offset-10">
-                {{ form_obj.receiver_zip }}
-                <span class="help-block">{{ form_obj.errors.receiver_zip.0 }}</span>
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.receiver_zip.id_for_label }}" class="form-label">{{ form_obj.receiver_zip.label }}</label>
+                <div class="col-sm-offset-10">
+                    {{ form_obj.receiver_zip }}
+                    <span class="help-block">{{ form_obj.errors.receiver_zip.0 }}</span>
+                </div>
             </div>
-        </div>
-        <div class="mb-3 mt-3">
-                <input type="submit" value="Add" class="btn btn-success">
-        </div>
-    </form>
-</body>
+            <div class="mb-3 mt-3">
+                    <input type="submit" value="Add" class="btn btn-success">
+            </div>
+        </form>
+    </div>
+{% endblock %}

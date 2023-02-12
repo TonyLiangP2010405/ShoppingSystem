@@ -1,13 +1,7 @@
+{% extends 'base.html' %}
 {% load static %}
-
-<head>
-    <title>
-        products
-    </title>
-     <link rel="stylesheet" href="{% static 'plugins/bootstrap/css/bootstrap.css' %}">
+{% block content %}
     <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
-</head>
-<body>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <ul>
@@ -175,4 +169,4 @@
         })
     })
 </script>
-</body>
+{% endblock %}

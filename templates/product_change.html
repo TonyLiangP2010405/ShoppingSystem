@@ -1,0 +1,304 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container mt-3">
+    <form novalidate action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if  product.name|length is 0 %}
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.name.id_for_label }}" class="form-label">{{ form_obj.name.label }}</label>
+                <div class="col-sm-offset-10">
+                    {{ form_obj.name }}
+                    <span class="help-block">{{ form_obj.errors.name.0 }}</span>
+                </div>
+            </div>
+        {% else %}
+            <div class="mb-3 mt-3">
+                <div id="name_container" class="col-sm-offset-10">
+                    {{ product.name }}
+                    <input value="change name" type="button" id="change_name">
+                </div>
+            </div>
+        {% endif %}
+            <div class="mb-3 mt-3">
+                <div id="category_container" class="col-sm-offset-10">
+                    {{ product.category }}
+                    <input value="change category" type="button" id="change_category">
+                </div>
+            </div>
+            <div class="mb-3 mt-3">
+                <div id="price_container" class="col-sm-offset-10">
+                    {{ product.price }}
+                    <input value="change price" type="button" id="change_price">
+                </div>
+            </div>
+        {% if product.property1|length is 0 %}
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.property1.id_for_label }}" class="form-label">{{ form_obj.property1.label }}</label>
+                <div class="col-sm-offset-10">
+                    {{ form_obj.property1 }}
+                    <span class="help-block">{{ form_obj.errors.property1.0 }}</span>
+                </div>
+            </div>
+        {% else %}
+            <div class="mb-3 mt-3">
+                <div id="property1_container" class="col-sm-offset-10">
+                    {{ product.property1 }}
+                    <input value="change property1" type="button" id="change_property1">
+                </div>
+            </div>
+        {% endif %}
+        {% if product.property2|length is 0 %}
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.property2.id_for_label }}" class="form-label">{{ form_obj.property2.label }}</label>
+                <div class="col-sm-offset-10">
+                    {{ form_obj.property2 }}
+                    <span class="help-block">{{ form_obj.errors.property2.0 }}</span>
+                </div>
+            </div>
+        {% else %}
+            <div class="mb-3 mt-3">
+                <div id="property2_container" class="col-sm-offset-10">
+                    {{ product.property2 }}
+                    <input value="change property2" type="button" id="change_property2">
+                </div>
+            </div>
+        {% endif %}
+        {% if product.property3|length is 0 %}
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.property3.id_for_label }}" class="form-label">{{ form_obj.property3.label }}</label>
+                <div class="col-sm-offset-10">
+                    {{ form_obj.property3 }}
+                    <span class="help-block">{{ form_obj.errors.property3.0 }}</span>
+                </div>
+            </div>
+        {% else %}
+            <div class="mb-3 mt-3">
+                <div id="property3_container" class="col-sm-offset-10">
+                    {{ product.property3 }}
+                    <input value="change property3" type="button" id="change_property3">
+                </div>
+            </div>
+        {% endif %}
+        {% if product.property4|length is 0 %}
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.property4.id_for_label }}" class="form-label">{{ form_obj.property4.label }}</label>
+                <div class="col-sm-offset-10">
+                    {{ form_obj.property4 }}
+                    <span class="help-block">{{ form_obj.errors.property4.0 }}</span>
+                </div>
+            </div>
+        {% else %}
+            <div class="mb-3 mt-3">
+                <div id="property4_container" class="col-sm-offset-10">
+                    {{ product.property4 }}
+                    <input value="change property4" type="button" id="change_property4">
+                </div>
+            </div>
+        {% endif %}
+        {% if product.property5|length is 0 %}
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.property5.id_for_label }}" class="form-label">{{ form_obj.property5.label }}</label>
+                <div class="col-sm-offset-10">
+                    {{ form_obj.property5 }}
+                    <span class="help-block">{{ form_obj.errors.property5.0 }}</span>
+                </div>
+            </div>
+        {% else %}
+            <div class="mb-3 mt-3">
+                <div id="property5_container" class="col-sm-offset-10">
+                    {{ product.property5 }}
+                    <input value="change property5" type="button" id="change_property5">
+                </div>
+            </div>
+        {% endif %}
+        {% if product.property6|length is 0 %}
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.property6.id_for_label }}" class="form-label">{{ form_obj.property6.label }}</label>
+                <div class="col-sm-offset-10">
+                    {{ form_obj.property6 }}
+                    <span class="help-block">{{ form_obj.errors.property6.0 }}</span>
+                </div>
+            </div>
+        {% else %}
+            <div class="mb-3 mt-3">
+                <div id="property6_container" class="col-sm-offset-10">
+                    {{ product.property6 }}
+                    <input value="change property6" type="button" id="change_property6">
+                </div>
+            </div>
+        {% endif %}
+            <div class="mb-3 mt-3">
+                <div id="customer_rating_container" class="col-sm-offset-10">
+                    {{ product.customer_rating }}
+                    <input value="change customer rating" type="button" id="change_customer_rating">
+                </div>
+            </div>
+
+        {% if product.review|length is 0 %}
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.review.id_for_label }}" class="form-label">{{ form_obj.review.label }}</label>
+                <div class="col-sm-offset-10">
+                    {{ form_obj.review }}
+                    <span class="help-block">{{ form_obj.errors.review.0 }}</span>
+                </div>
+            </div>
+        {% else %}
+            <div class="mb-3 mt-3">
+                <div id="review_container" class="col-sm-offset-10">
+                    {{ product.review }}
+                    <input value="change review" type="button" id="change_review">
+                </div>
+            </div>
+        {% endif %}
+        <div class="mb-3 mt-3">
+            <div id="temporary_status_container" class="col-sm-offset-10">
+                {{ product.temporary_status }}
+                <input value="change temporary status" type="button" id="change_temporary_status">
+            </div>
+        </div>
+        {% if product.main_image|length is 0 %}
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.main_image.id_for_label }}" class="form-label">{{ form_obj.main_image.label }}</label>
+                <div class="col-sm-offset-10">
+                    {{ form_obj.main_image }}
+                    <span class="help-block">{{ form_obj.errors.main_image.0 }}</span>
+                </div>
+            </div>
+        {% else %}
+            <div class="mb-3 mt-3">
+                <div class="col-sm-offset-10">
+                    <img src="/media/{{ product.main_image }}" alt="main_image" width="100" height="100">
+                    <button id="main_image">Remove main image</button>
+                </div>
+            </div>
+        {% endif %}
+        {% if product.photo1|length is 0 %}
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.photo1.id_for_label}}" class="form-label">{{ form_obj.photo1.label }}</label>
+                <div class="col-sm-offset-10">
+                    {{ form_obj.photo1 }}
+                    <span class="help-block">{{ form_obj.errors.photo1.0 }}</span>
+                </div>
+            </div>
+        {% else %}
+            <div class="mb-3 mt-3">
+                <div class="col-sm-offset-10">
+                    <img src="/media/{{ product.photo1 }}" alt="photo1" width="100" height="100">
+                    <button id="photo1">Remove Photo1</button>
+                </div>
+            </div>
+        {% endif %}
+        {% if product.photo2|length is 0 %}
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.photo2.id_for_label }}" class="form-label">{{ form_obj.photo2.label }}</label>
+                <div class="col-sm-offset-10">
+                    {{ form_obj.photo2 }}
+                    <span class="help-block">{{ form_obj.errors.photo2.0 }}</span>
+                </div>
+            </div>
+        {% else %}
+            <div class="mb-3 mt-3">
+                <div class="col-sm-offset-10">
+                    <img src="/media/{{ product.photo2 }}" alt="photo2" width="100" height="100">
+                    <button id="photo2">Remove Photo2</button>
+                </div>
+            </div>
+        {% endif %}
+        {% if product.photo3|length is 0 %}
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.photo3.id_for_label }}" class="form-label">{{ form_obj.photo3.label }}</label>
+                <div class="col-sm-offset-10">
+                    {{ form_obj.photo3 }}
+                    <span class="help-block">{{ form_obj.errors.photo3.0 }}</span>
+                </div>
+            </div>
+        {% else %}
+            <div class="mb-3 mt-3">
+                <div class="col-sm-offset-10">
+                    <img src="/media/{{ product.photo3 }}" alt="photo3" width="100" height="100">
+                    <button id="photo3">Remove Photo3</button>
+                </div>
+            </div>
+        {% endif %}
+        {% if product.photo4|length is 0 %}
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.photo4.id_for_label }}" class="form-label">{{ form_obj.photo4.label }}</label>
+                <div class="col-sm-offset-10">
+                    {{ form_obj.photo4 }}
+                    <span class="help-block">{{ form_obj.errors.photo4.0 }}</span>
+                </div>
+            </div>
+        {% else %}
+            <div class="mb-3 mt-3">
+                <div class="col-sm-offset-10">
+                    <img src="/media/{{ product.photo4 }}" alt="photo4" width="100" height="100">
+                    <button id="photo4">Remove Photo4</button>
+                </div>
+            </div>
+        {% endif %}
+        <div class="mb-3 mt-3">
+            <input type="submit" value="Add" class="btn btn-success">
+        </div>
+    </form>
+</div>
+    <script>
+        $(document).on('click', '#change_name', function () {
+            $('#name_container').html('<div class="mb-3 mt-3"> <label for="{{ form_obj.name.id_for_label }}" class="form-label">{{ form_obj.name.label }}</label> <div class="col-sm-offset-10">{{ form_obj.name }} <span class="help-block">{{ form_obj.errors.name.0 }}</span></div></div>')
+        });
+    </script>
+    <script>
+        $(document).on('click', '#change_category', function () {
+            $('#category_container').html('<div class="mb-3 mt-3"> <label for="{{ form_obj.category.id_for_label }}" class="form-label">{{ form_obj.category.label }}</label> <div class="col-sm-offset-10">{{ form_obj.category|escapejs }} <span class="help-block">{{ form_obj.errors.category.0 }}</span></div></div>')
+        });
+    </script>
+    <script>
+        $(document).on('click', '#change_price', function () {
+            $('#price_container').html('<div class="mb-3 mt-3"><label for="{{ form_obj.price.id_for_label }}" class="form-label">{{ form_obj.price.label }}</label> <div class="col-sm-offset-10">{{ form_obj.price }} <span class="help-block">{{ form_obj.errors.price.0 }}</span> </div> </div>')
+        });
+    </script>
+    <script>
+        $(document).on('click', '#change_property1', function () {
+            $('#property1_container').html('<div class="mb-3 mt-3"> <label for="{{ form_obj.property1.id_for_label }}" class="form-label">{{ form_obj.property1.label }}</label> <div class="col-sm-offset-10">{{ form_obj.property1 }} <span class="help-block">{{ form_obj.errors.property1.0 }}</span> </div> </div>')
+        });
+    </script>
+    <script>
+        $(document).on('click', '#change_property2', function () {
+            $('#property2_container').html('<div class="mb-3 mt-3"> <label for="{{ form_obj.property2.id_for_label }}" class="form-label">{{ form_obj.property2.label }}</label> <div class="col-sm-offset-10">{{ form_obj.property2 }} <span class="help-block">{{ form_obj.errors.property2.0 }}</span> </div> </div>')
+        });
+    </script>
+    <script>
+        $(document).on('click', '#change_property3', function () {
+            $('#property3_container').html('<div class="mb-3 mt-3"> <label for="{{ form_obj.property3.id_for_label }}" class="form-label">{{ form_obj.property3.label }}</label> <div class="col-sm-offset-10">{{ form_obj.property3 }} <span class="help-block">{{ form_obj.errors.property3.0 }}</span> </div> </div>')
+        });
+    </script>
+    <script>
+        $(document).on('click', '#change_property4', function () {
+            $('#property4_container').html('<div class="mb-3 mt-3"> <label for="{{ form_obj.property4.id_for_label }}" class="form-label">{{ form_obj.property4.label }}</label> <div class="col-sm-offset-10">{{ form_obj.property4 }} <span class="help-block">{{ form_obj.errors.property4.0 }}</span> </div> </div>')
+        });
+    </script>
+    <script>
+        $(document).on('click', '#change_property5', function () {
+            $('#property5_container').html('<div class="mb-3 mt-3"> <label for="{{ form_obj.property5.id_for_label }}" class="form-label">{{ form_obj.property5.label }}</label> <div class="col-sm-offset-10">{{ form_obj.property5 }} <span class="help-block">{{ form_obj.errors.property5.0 }}</span> </div> </div>')
+        });
+    </script>
+    <script>
+        $(document).on('click', '#change_property6', function () {
+            $('#property6_container').html('<div class="mb-3 mt-3"> <label for="{{ form_obj.property6.id_for_label }}" class="form-label">{{ form_obj.property6.label }}</label> <div class="col-sm-offset-10">{{ form_obj.property6 }} <span class="help-block">{{ form_obj.errors.property6.0 }}</span> </div> </div>')
+        });
+    </script>
+    <script>
+        $(document).on('click', '#change_customer_rating', function () {
+            $('#customer_rating_container').html('<div class="mb-3 mt-3"> <label for="{{ form_obj.customer_rating.id_for_label }}" class="form-label">{{ form_obj.customer_rating.label }}</label> <div class="col-sm-offset-10">{{ form_obj.customer_rating|escapejs }} <span class="help-block">{{ form_obj.errors.customer_rating.0 }}</span> </div> </div>')
+        });
+    </script>
+    <script>
+        $(document).on('click', '#change_review', function () {
+            $('#review_container').html('<div class="mb-3 mt-3"> <label for="{{ form_obj.review.id_for_label }}" class="form-label">{{ form_obj.review.label }}</label> <div class="col-sm-offset-10">{{ form_obj.review|escapejs }} <span class="help-block">{{ form_obj.errors.review.0 }}</span> </div> </div>')
+        });
+    </script>
+    <script>
+        $(document).on('click', '#change_temporary_status', function () {
+            $('#temporary_status_container').html('<div class="mb-3 mt-3"> <label for="{{ form_obj.temporary_status.id_for_label }}" class="form-label">{{ form_obj.temporary_status.label }}</label> <div class="col-sm-offset-10">{{ form_obj.temporary_status|escapejs }} <span class="help-block">{{ form_obj.errors.temporary_status.0 }}</span> </div> </div>')
+        });
+    </script>
+{% endblock %}

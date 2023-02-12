@@ -1,9 +1,6 @@
+{% extends 'base.html' %}
 {% load static %}
-<head>
-    <title>login</title>
-    <link rel="stylesheet" href="{% static 'plugins/bootstrap/css/bootstrap.css' %}">
-</head>
-<body>
+{% block content %}
     <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
     {% if request.user.is_authenticated %}
         <div class="col-8">
@@ -26,8 +23,10 @@
                         <label for="agreeTerms" id="info"></label>
                     </div>
                 </div>
-                <button><a href="{% url 'logout' %}">logout</a></button>
-                <button><a href="{% url 'register' %}">register</a></button>
+                <div>
+                    <button class="btn btn-dark"><a href="{% url 'register' %}">register</a></button>
+                </div>
+
             </div>
         </form>
     {% endif %}
@@ -51,4 +50,4 @@
             })
         })
     </script>
-</body>
+{% endblock %}

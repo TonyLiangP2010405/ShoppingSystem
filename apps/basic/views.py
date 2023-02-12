@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
 from apps.basic.forms import ShippingAddressInfo
 from apps.basic.models import ShippingAddress
+from apps.goods.models import Product
 
 
 # Create your views here.
 def home_page(request):
-    return render(request, "homePage.html")
+    products = Product.objects.all()
+    return render(request, "homePage.html", {"products": products})
 
 
 def add_shipping_address(request):

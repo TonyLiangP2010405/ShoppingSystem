@@ -1,9 +1,6 @@
+{% extends 'base.html' %}
 {% load static %}
-<head>
-    <title>logout</title>
-    <link rel="stylesheet" href="{% static 'plugins/bootstrap/css/bootstrap.css' %}">
-</head>
-<body>
+{% block content %}
     <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
     <h1>Are you sure to logout</h1>
     <button id="logout">Sure</button>
@@ -25,4 +22,4 @@
         })
     })
 </script>
-</body>
+{% endblock %}

@@ -26,38 +26,64 @@ def product_detail(request, product_id):
 
 
 def ajax_products(request):
+    print(request.GET)
     product_name = request.GET.get("name", '')
     category_id = request.GET.get("category_id", '')
     temporary_status = request.GET.get("temporary_status", '')
     page_size = 2
     page = int(request.GET["page"])
-    total = Product.objects.filter(name=product_name,
-                                   temporary_status=temporary_status).count()
-    products = Product.objects.filter(name=product_name,
-                                      temporary_status=temporary_status).order_by("product_id")[
-               (page - 1) * page_size: page * page_size]
-    rows = []
-    for product in products:
-        rows.append({
-            "product_id": product.product_id,
-            "name": product.name,
-            "temporary_status": product.temporary_status,
-            "category_id": product.category.name,
-            "price": product.price,
-            "property1": product.property1,
-            "property2": product.property2,
-            "property3": product.property3,
-            "property4": product.property4,
-            "property5": product.property5,
-            "property6": product.property6,
-            "sale_number": product.sale_number,
-            "sale_amount": product.sale_amount,
-            "customer_rating": product.customer_rating,
-            "review": product.review,
-            "createDate": product.createDate
-        })
+    if product_name == "" and category_id == "":
+        total = Product.objects.all().count()
+        products = Product.objects.all().order_by("product_id")[(page - 1) * page_size: page * page_size]
+        rows = []
+        for product in products:
+            rows.append({
+                "product_id": product.product_id,
+                "name": product.name,
+                "temporary_status": product.temporary_status,
+                "category_id": product.category.name,
+                "price": product.price,
+                "property1": product.property1,
+                "property2": product.property2,
+                "property3": product.property3,
+                "property4": product.property4,
+                "property5": product.property5,
+                "property6": product.property6,
+                "sale_number": product.sale_number,
+                "sale_amount": product.sale_amount,
+                "customer_rating": product.customer_rating,
+                "review": product.review,
+                "createDate": product.createDate
+            })
+        datas = {"total": total, "rows": rows}
+    else:
+        total = Product.objects.filter(name=product_name,
+                                       temporary_status=temporary_status).count()
+        products = Product.objects.filter(name=product_name,
+                                          temporary_status=temporary_status).order_by("product_id")[
+                   (page - 1) * page_size: page * page_size]
+        rows = []
+        for product in products:
+            rows.append({
+                "product_id": product.product_id,
+                "name": product.name,
+                "temporary_status": product.temporary_status,
+                "category_id": product.category.name,
+                "price": product.price,
+                "property1": product.property1,
+                "property2": product.property2,
+                "property3": product.property3,
+                "property4": product.property4,
+                "property5": product.property5,
+                "property6": product.property6,
+                "sale_number": product.sale_number,
+                "sale_amount": product.sale_amount,
+                "customer_rating": product.customer_rating,
+                "review": product.review,
+                "createDate": product.createDate
+            })
 
-    datas = {"total": total, "rows": rows}
+        datas = {"total": total, "rows": rows}
     return JsonResponse(datas, safe=False, json_dumps_params={'ensure_ascii': False, "indent": 4})
 
 
@@ -119,11 +145,13 @@ def product_add(request):
 
 
 def product_change(request, product_id):
-    product = Product.objects.filter(product_id=product_id)
+    product = Product.objects.filter(product_id=product_id)[0]
+    print(product.temporary_status)
     if request.method == "GET":
         form_obj = ProductInfoChange()
-        return render(request, "product_add.html", {"form_obj": form_obj})
+        return render(request, "product_change.html", {"form_obj": form_obj, "product": product})
     if request.method == "POST":
+        print(request.POST)
         form_obj = ProductInfoChange(request.POST, request.FILES)
         name = request.POST.get("name", '')
         category = request.POST.get("category", '')
@@ -178,7 +206,8 @@ def product_change(request, product_id):
         if photo4:
             form_obj.cleaned_data["photo4"] = photo4
         try:
-            product.update(**form_obj.cleaned_data)
+            Product.objects.filter(product_id=product_id).update(**form_obj.cleaned_data)
+            print("sucess")
             return redirect("products")
         except Exception as e:
             print(e)

@@ -1,11 +1,6 @@
+{% extends 'base.html' %}
 {% load static %}
-<head>
-    <title>
-        products
-    </title>
-     <link rel="stylesheet" href="{% static 'plugins/bootstrap/css/bootstrap.css' %}">
-</head>
-<body>
+{% block content %}
     <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
     {% for product in products %}
         <a  href="{% url 'product_detail' product.product_id %}">{{ product.product_id }}</a>
@@ -19,4 +14,4 @@
             <img src="/media/{{ product.main_image }}" alt="main_image">
         {% endif %}
     {% endfor %}
-</body>
+{% endblock %}

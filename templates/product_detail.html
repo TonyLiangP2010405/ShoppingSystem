@@ -1,12 +1,6 @@
+{% extends 'base.html' %}
 {% load static %}
-
-<head>
-    <title>
-        products
-    </title>
-     <link rel="stylesheet" href="{% static 'plugins/bootstrap/css/bootstrap.css' %}">
-</head>
-<body>
+{% block content %}
         {{ product.0.product_id }}
         {{ product.0.name }}
         {{ product.0.price }}
@@ -38,4 +32,4 @@
         {% else %}
             <img src="/media/{{ product.0.photo4 }}" alt="photo4">
         {% endif %}
-</body>
+{% endblock %}

@@ -1,9 +1,6 @@
+{% extends 'base.html' %}
 {% load static %}
-<head>
-    <link rel="stylesheet" href="{% static 'plugins/bootstrap/css/bootstrap.css' %}">
-    <title>user register</title>
-</head>
-<body>
+{% block content %}
     <div class="container mt-3">
         <form novalidate action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
@@ -113,4 +110,4 @@
             </div>
         </form>
     </div>
-</body>
+{% endblock %}

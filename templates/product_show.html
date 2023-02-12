@@ -1,14 +1,6 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-
-    <link rel="stylesheet" href="{% static 'plugins/bootstrap/css/bootstrap.css' %}">
-    <script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.js' %}"></script>
-    <meta charset="UTF-8">
-    <title>product add</title>
-</head>
-<body>
+{% block content %}
     <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.js' %}"></script>
     <script src="{% static 'plugins/bootstrap-table/bootstrap-table.min.css' %}"></script>
@@ -247,5 +239,4 @@ $('#btn_search').click(function () {
     })
 })
 </script>
-</body>
-</html>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping System</title>
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap/css/bootstrap.css' %}">
+    <script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.js' %}"></script>
+    <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.js' %}"></script>
+    <script src="{% static 'plugins/bootstrap-table/bootstrap-table.min.css' %}"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <ul class="nav">
+        <li class="nav-item"><a class="nav-link" href="{% url 'homePage' %}">HomePage</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">register</a></li>
+        {% if request.user.is_authenticated %}
+            {{ request.user.username }}
+            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">logout</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'change_password' %}">change password</a></li>
+
+            {% if request.user.is_superuser %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'add_product' %}">add product</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'products' %}">vendor check products</a></li>
+            {% endif %}
+        {% else %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'add_shipping_address' %}">user add shipping address</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">login</a></li>
+        {% endif %}
+    </ul>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>
