@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="username" name="username" placeholder="username">
+            </div>
+            <div class="input-group mb-3">
+                <input type="password" class="form-control" id="password" name="password" placeholder="password">
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <input id="login" type="button" class="btn btn-success" value="login">
+                    <div class="col-8">
+                        <label for="agreeTerms" id="info"></label>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn btn-dark"><a href="{% url 'register' %}">register</a></button>
+                </div>
+
+            </div>
+        </form>
+    <script>
+        $("#login").click(function () {
+            $.ajax({
+                url:"/shoppingCart/user_login/ajax_login_data/",
+                type: "POST",
+                data:{
+                    username: $("#username").val(),
+                    password: $("#password").val(),
+                    product_id: {{ product_id }},
+                    "csrfmiddlewaretoken": $("[name = 'csrfmiddlewaretoken']").val()
+                },
+                success: function (data) {
+                    window.location = data['url']
+                },
+                error: function (jqXHR, textStatus, err) {
+                    console.log(arguments)
+                }
+            })
+        })
+    </script>
+{% endblock %}

@@ -170,6 +170,11 @@ def product_change(request, product_id):
         photo2 = request.FILES.get("photo2", '')
         photo3 = request.FILES.get("photo3", '')
         photo4 = request.FILES.get("photo4", '')
+        old_main_image = product.main_image
+        old_photo1 = product.photo1
+        old_photo2 = product.photo2
+        old_photo3 = product.photo3
+        old_photo4 = product.photo4
         form_obj.cleaned_data = {}
         if name:
             form_obj.cleaned_data["name"] = name
@@ -194,17 +199,42 @@ def product_change(request, product_id):
         if review:
             form_obj.cleaned_data["review"] = review
         if main_image:
-            form_obj.cleaned_data["main_image"] = main_image
+            if old_main_image:
+                image_path = old_main_image.path
+                if os.path.exists(image_path):
+                    os.remove(image_path)
+            product.main_image = main_image
+            product.save()
         if temporary_status:
             form_obj.cleaned_data["temporary_status"] = temporary_status
         if photo1:
-            form_obj.cleaned_data["photo1"] = photo1
+            if old_photo1:
+                image_path = old_photo1.path
+                if os.path.exists(image_path):
+                    os.remove(image_path)
+            product.photo1 = photo1
+            product.save()
         if photo2:
-            form_obj.cleaned_data["photo2"] = photo2
+            if old_photo2:
+                image_path = old_photo2.path
+                if os.path.exists(image_path):
+                    os.remove(image_path)
+            product.photo2 = photo2
+            product.save()
         if photo3:
-            form_obj.cleaned_data["photo3"] = photo3
+            if old_photo3:
+                image_path = old_photo3.path
+                if os.path.exists(image_path):
+                    os.remove(image_path)
+            product.photo3 = photo3
+            product.save()
         if photo4:
-            form_obj.cleaned_data["photo4"] = photo4
+            if old_photo4:
+                image_path = old_photo4.path
+                if os.path.exists(image_path):
+                    os.remove(image_path)
+            product.photo4 = photo4
+            product.save()
         try:
             Product.objects.filter(product_id=product_id).update(**form_obj.cleaned_data)
             print("sucess")

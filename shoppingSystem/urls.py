@@ -29,6 +29,7 @@ urlpatterns = [
     path('user_change_password/', views.change_password, name='change_password'),
     path('', include('apps.basic.urls')),
     path('products/', include('apps.goods.urls')),
+    path('', include('apps.order.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

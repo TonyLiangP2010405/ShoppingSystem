@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    {% csrf_token %}
+    {% for item in shopping_cart %}
+        <div>
+            <div>{{ item.shopping_cart_id }}</div>
+            <div>{{ item.product }}</div>
+            <input id="minus" type="button" value="-"><div>{{ item.count_number }}</div><input id="plus" type="button" value="+">
+            <input id="{{ item.shopping_cart_id }}" type="button" value="Remove item">
+        </div>
+        <script>
+            $("#{{ item.shopping_cart_id }}").click(function () {
+                $.ajax({
+                    url:"/shoppingCart/ajax_delete",
+                    type: "POST",
+                    data:{
+                        "csrfmiddlewaretoken": $("[name = 'csrfmiddlewaretoken']").val(),
+                        shopping_cart_id: {{ item.shopping_cart_id }},
+                    },
+                    success: function (data) {
+                        location.reload()
+                        alert(data["msg"])
+                },
+                    error: function (jqXHR, textStatus, err) {
+                            console.log(arguments)
+                        }
+                })
+            })
+        </script>
+    {% endfor %}
+
+{% endblock %}

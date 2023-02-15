@@ -1,35 +1,72 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-        {{ product.0.product_id }}
-        {{ product.0.name }}
-        {{ product.0.price }}
-        {{ product.0.category.name }}
-        {{ product.0.property1 }}
-        {{ product.0.property2 }}
+        {% csrf_token %}
+        <div id="product_id">{{ product.0.product_id }}</div>
+        <div>{{ product.0.name }}</div>
+        <div>{{ product.0.price }}</div>
+        <div>{{ product.0.category.name }}</div>
+        <div>{{ product.0.property1 }}</div>
+        <div>{{ product.0.property2 }}</div>
         {% if  product.0.main_image|length is 0 %}
-            <span>the main image is empty</span>
+            <div>the main image is empty</div>
         {% else %}
-            <img src="/media/{{ img_url }}" alt="main_image">
+            <div><img src="/media/{{ img_url }}" alt="main_image" width="100" height="100"></div>
         {% endif %}
         {% if product.0.photo1|length is 0 %}
-            <span> the photo1 is empty</span>
+            <div> the photo1 is empty</div>
         {% else %}
-            <img src="/media/{{ product.0.photo1 }}" alt="photo1">
+            <div><img src="/media/{{ product.0.photo1 }}" alt="photo1" width="100" height="100"></div>
         {% endif %}
         {% if product.0.photo2|length is 0 %}
-            <span> the photo2 is empty</span>
+            <div> the photo2 is empty</div>
         {% else %}
-            <img src="/media/{{ product.0.photo2 }}" alt="photo2">
+            <div><img src="/media/{{ product.0.photo2 }}" alt="photo2" width="100" height="100"></div>
         {% endif %}
         {% if product.0.photo3|length is 0 %}
-            <span>the photo3 is empty</span>
+            <div>the photo3 is empty</div>
         {% else %}
-            <img src="/media/{{ product.0.photo3 }}" alt="photo3">
+            <div><img src="/media/{{ product.0.photo3 }}" alt="photo3" width="100" height="100"></div>
         {% endif  %}
         {% if product.0.photo4|length is 0 %}
-            <span>the photo4 is empty</span>
+            <div>the photo4 is empty</div>
         {% else %}
-            <img src="/media/{{ product.0.photo4 }}" alt="photo4">
+            <div><img src="/media/{{ product.0.photo4 }}" alt="photo4" width="100" height="100"></div>
         {% endif %}
+        {% if request.user.is_authenticated %}
+            {% if request.user.is_superuser %}
+            {% else %}
+                <div>
+                    <input id="add_shopping_cart" type="button" value="Add to shopping cart">
+                </div>
+            {% endif %}
+        {% else %}
+           <a href="{% url 'login2' product.0.product_id %}">Add to shopping cart</a>
+        {% endif %}
+    <script>
+        $("#add_shopping_cart").click(function (){
+            $.ajax({
+                url:"/shoppingCart/ajax_shopping_cart_data/",
+
+                type:"POST",
+                data:{
+                    product_id: {{ product.0.product_id }},
+                    "csrfmiddlewaretoken": $("[name = 'csrfmiddlewaretoken']").val(),
+
+                },
+                success: function (data) {
+                    if (data["code"] === 0){
+                        alert(data["msg"])
+                    }
+                    else {
+                        alert(data["msg"])
+                        window.location = data["url"]
+                    }
+                },
+                error: function (jqXHR, textStatus, err) {
+                    console.log(arguments)
+                }
+            })
+        })
+    </script>
 {% endblock %}

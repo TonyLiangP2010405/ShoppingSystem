@@ -1,12 +1,13 @@
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-
+from apps.goods.models import Product
 from apps.basic.models import ShippingAddress
 from apps.users.forms import UserRegForm, UserChangePasswordForm
 from apps.users.models import MyUser
 from django.contrib.auth.hashers import make_password
 from apps.basic.forms import ShippingAddressInfo
+from apps.order.models import ShoppingCart
 
 
 # Create your views here.
@@ -25,7 +26,8 @@ def user_register(request):
             password = request.POST.get("password", '')
             if users:
                 info = 'the user has been existed'
-                return render(request, 'user_register.html', {"form_obj": form_obj, 'form_obj2': form_obj2, "info": info})
+                return render(request, 'user_register.html',
+                              {"form_obj": form_obj, 'form_obj2': form_obj2, "info": info})
             else:
                 form_obj.cleaned_data["username"] = uname
                 form_obj.cleaned_data["email"] = email
@@ -70,6 +72,12 @@ def user_login(request):
 
 
 def ajax_login_data(request):
+    if "shopping_cart" in request.session:
+        shopping_cart = request.session.get("shopping_cart")
+        print(shopping_cart)
+        product = Product.objects.filter(product_id=shopping_cart["product_id"])
+        count_number = shopping_cart["count_number"]
+        ShoppingCart.objects.create(product=product, count_number=count_number)
     uname = request.POST.get("username", '')
     pwd = request.POST.get("password", '')
     json_dict = {}
@@ -108,6 +116,7 @@ def ajax_logout_data(request):
     logout(request)
     json_dict["code"] = 1000
     json_dict["msg"] = "logout successful, please waite 3 seconds"
+    ShoppingCart.objects.all().delete()
     return JsonResponse(json_dict)
 
 

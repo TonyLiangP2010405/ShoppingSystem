@@ -166,9 +166,9 @@
             </div>
         {% else %}
             <div class="mb-3 mt-3">
-                <div class="col-sm-offset-10">
-                    <img src="/media/{{ product.main_image }}" alt="main_image" width="100" height="100">
-                    <button id="main_image">Remove main image</button>
+                <div id="main_image_container" class="col-sm-offset-10">
+                    <img src="/media/{{ product.main_image }}/" alt="main_image">
+                    <input value="change main image" type="button" id="change_main_image">
                 </div>
             </div>
         {% endif %}
@@ -182,9 +182,9 @@
             </div>
         {% else %}
             <div class="mb-3 mt-3">
-                <div class="col-sm-offset-10">
-                    <img src="/media/{{ product.photo1 }}" alt="photo1" width="100" height="100">
-                    <button id="photo1">Remove Photo1</button>
+                <div id="photo1_container" class="col-sm-offset-10">
+                    <img src="/media/{{ product.photo1 }}/" alt="photo1">
+                    <input value="change photo1" type="button" id="change_photo1">
                 </div>
             </div>
         {% endif %}
@@ -192,15 +192,15 @@
             <div class="mb-3 mt-3">
                 <label for="{{ form_obj.photo2.id_for_label }}" class="form-label">{{ form_obj.photo2.label }}</label>
                 <div class="col-sm-offset-10">
-                    {{ form_obj.photo2 }}
+                        {{ form_obj.photo2 }}
                     <span class="help-block">{{ form_obj.errors.photo2.0 }}</span>
                 </div>
             </div>
         {% else %}
             <div class="mb-3 mt-3">
-                <div class="col-sm-offset-10">
-                    <img src="/media/{{ product.photo2 }}" alt="photo2" width="100" height="100">
-                    <button id="photo2">Remove Photo2</button>
+                <div id="photo2_container" class="col-sm-offset-10">
+                    {{ product.photo2 }}
+                    <input value="change photo2" type="button" id="change_photo2">
                 </div>
             </div>
         {% endif %}
@@ -214,9 +214,9 @@
             </div>
         {% else %}
             <div class="mb-3 mt-3">
-                <div class="col-sm-offset-10">
-                    <img src="/media/{{ product.photo3 }}" alt="photo3" width="100" height="100">
-                    <button id="photo3">Remove Photo3</button>
+                <div id="photo3_container" class="col-sm-offset-10">
+                    <img src="/media/{{ product.photo3 }}/" alt="photo3">
+                    <input value="change photo3" type="button" id="change_photo3">
                 </div>
             </div>
         {% endif %}
@@ -230,9 +230,9 @@
             </div>
         {% else %}
             <div class="mb-3 mt-3">
-                <div class="col-sm-offset-10">
-                    <img src="/media/{{ product.photo4 }}" alt="photo4" width="100" height="100">
-                    <button id="photo4">Remove Photo4</button>
+                <div id="photo4_container" class="col-sm-offset-10">
+                    <img src="/media/{{ product.photo4 }}/" alt="photo4">
+                    <input value="change photo4" type="button" id="change_photo4">
                 </div>
             </div>
         {% endif %}
@@ -299,6 +299,31 @@
     <script>
         $(document).on('click', '#change_temporary_status', function () {
             $('#temporary_status_container').html('<div class="mb-3 mt-3"> <label for="{{ form_obj.temporary_status.id_for_label }}" class="form-label">{{ form_obj.temporary_status.label }}</label> <div class="col-sm-offset-10">{{ form_obj.temporary_status|escapejs }} <span class="help-block">{{ form_obj.errors.temporary_status.0 }}</span> </div> </div>')
+        });
+    </script>
+    <script>
+        $(document).on('click', '#change_main_image', function () {
+            $('#main_image_container').html('<div class="mb-3 mt-3"> <label for="{{ form_obj.main_image.id_for_label }}" class="form-label">{{ form_obj.main_image.label }}</label> <div class="col-sm-offset-10">{{ form_obj.main_image|escapejs }} <span class="help-block">{{ form_obj.errors.main_image.0 }}</span> </div> </div>')
+        });
+    </script>
+    <script>
+        $(document).on('click', '#change_photo1', function () {
+            $('#photo1_container').html('<div class="mb-3 mt-3"> <label for="{{ form_obj.photo1.id_for_label }}" class="form-label">{{ form_obj.photo1.label }}</label> <div class="col-sm-offset-10">{{ form_obj.photo1|escapejs }} <span class="help-block">{{ form_obj.errors.photo1.0 }}</span> </div> </div>')
+        });
+    </script>
+    <script>
+        $(document).on('click', '#change_photo2', function () {
+            $('#photo2_container').html('<div class="mb-3 mt-3"> <label for="{{ form_obj.photo2.id_for_label }}" class="form-label">{{ form_obj.photo2.label }}</label> <div class="col-sm-offset-10">{{ form_obj.photo2|escapejs }} <span class="help-block">{{ form_obj.errors.photo2.0 }}</span> </div> </div>')
+        });
+    </script>
+    <script>
+        $(document).on('click', '#change_photo3', function () {
+            $('#photo3_container').html('<div class="mb-3 mt-3"> <label for="{{ form_obj.photo3.id_for_label }}" class="form-label">{{ form_obj.photo3.label }}</label> <div class="col-sm-offset-10">{{ form_obj.photo3|escapejs }} <span class="help-block">{{ form_obj.errors.photo3.0 }}</span> </div> </div>')
+        });
+    </script>
+    <script>
+        $(document).on('click', '#change_photo4', function () {
+            $('#photo4_container').html('<div class="mb-3 mt-3"> <label for="{{ form_obj.photo4.id_for_label }}" class="form-label">{{ form_obj.photo4.label }}</label> <div class="col-sm-offset-10">{{ form_obj.photo4|escapejs }} <span class="help-block">{{ form_obj.errors.photo4.0 }}</span> </div> </div>')
         });
     </script>
 {% endblock %}

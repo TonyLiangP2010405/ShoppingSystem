@@ -14,7 +14,11 @@
 <body>
     <ul class="nav">
         <li class="nav-item"><a class="nav-link" href="{% url 'homePage' %}">HomePage</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">register</a></li>
+
+        {% if request.user.is_superuser %}
+        {% else %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'shopping_cart' %}">ShoppingCart</a></li>
+        {% endif %}
         {% if request.user.is_authenticated %}
             {{ request.user.username }}
             <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">logout</a></li>
@@ -25,6 +29,7 @@
                 <li class="nav-item"><a class="nav-link" href="{% url 'products' %}">vendor check products</a></li>
             {% endif %}
         {% else %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">register</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'add_shipping_address' %}">user add shipping address</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">login</a></li>
         {% endif %}
