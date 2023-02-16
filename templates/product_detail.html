@@ -55,12 +55,14 @@
 
                 },
                 success: function (data) {
-                    if (data["code"] === 0){
-                        alert(data["msg"])
+                    if (data["warning"]){
+                        alert(data["warning"])
                     }
-                    else {
-                        alert(data["msg"])
+                    if (data["code"] === 1){
                         window.location = data["url"]
+                    }
+                    if(data["msg"] && data["code"] === 0){
+                        alert(data["msg"])
                     }
                 },
                 error: function (jqXHR, textStatus, err) {

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>order_id</th>
+                <th>total_order_amount</th>
+                <th>purchase_order_status</th>
+                <th>shipped_date</th>
+                <th>cancelDate</th>
+                <th>user</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>{{ order.order_id }}</th>
+                <th>{{ order.total_order_amount }}</th>
+                <th>{{ order.purchase_order_status }}</th>
+                <th>{{ order.shipped_date }}</th>
+                <th>{{ order.cancelDate }}</th>
+                <th>{{ order.user.username }}</th>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

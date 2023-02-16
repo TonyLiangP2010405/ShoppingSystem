@@ -2,32 +2,102 @@
 {% load static %}
 {% block content %}
     {% csrf_token %}
-    {% for item in shopping_cart %}
-        <div>
-            <div>{{ item.shopping_cart_id }}</div>
-            <div>{{ item.product }}</div>
-            <input id="minus" type="button" value="-"><div>{{ item.count_number }}</div><input id="plus" type="button" value="+">
-            <input id="{{ item.shopping_cart_id }}" type="button" value="Remove item">
-        </div>
-        <script>
-            $("#{{ item.shopping_cart_id }}").click(function () {
-                $.ajax({
-                    url:"/shoppingCart/ajax_delete",
-                    type: "POST",
-                    data:{
-                        "csrfmiddlewaretoken": $("[name = 'csrfmiddlewaretoken']").val(),
-                        shopping_cart_id: {{ item.shopping_cart_id }},
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>product name</th>
+                <th>product main image</th>
+                <th>count number</th>
+                <th>operation</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in shopping_cart %}
+            <tr>
+                <td>{{ item.shopping_cart_id }}</td>
+                <td>{{ item.product.name }}</td>
+                <td><img src="/media/{{ item.product.main_image }}" alt="main_image" width="100" height="100"></td>
+                <td><input id="{{ item.shopping_cart_id }}minus" type="button" value="-">{{ item.count_number }}<input id="{{ item.shopping_cart_id }}plus" type="button" value="+"></td>
+                <td><input id="{{ item.shopping_cart_id }}" type="button" value="Remove item"></td>
+            </tr>
+            <script>
+                $("#{{ item.shopping_cart_id }}").click(function () {
+                    $.ajax({
+                        url:"/shoppingCart/ajax_delete",
+                        type: "POST",
+                        data:{
+                            "csrfmiddlewaretoken": $("[name = 'csrfmiddlewaretoken']").val(),
+                            shopping_cart_id: {{ item.shopping_cart_id }},
+                        },
+                        success: function (data) {
+                            location.reload()
+                            alert(data["msg"])
                     },
-                    success: function (data) {
-                        location.reload()
-                        alert(data["msg"])
-                },
-                    error: function (jqXHR, textStatus, err) {
-                            console.log(arguments)
-                        }
+                        error: function (jqXHR, textStatus, err) {
+                                console.log(arguments)
+                            }
+                    })
                 })
-            })
-        </script>
-    {% endfor %}
+            </script>
+            <script>
+                $("#{{ item.shopping_cart_id }}minus").click(function () {
+                    $.ajax({
+                        url: '/shoppingCart/ajax_minus/',
+                        type: 'POST',
+                        data: {
+                            "csrfmiddlewaretoken": $("[name = 'csrfmiddlewaretoken']").val(),
+                            shopping_cart_id: {{ item.shopping_cart_id }},
+                            count: {{ item.count_number }},
+                        },
+                        success: function (data) {
+                            if (data["warning"]){
+                                alert(data["warning"])
+                            }
+                            else {
+                                console.log(data)
+                            }
+                            location.reload()
 
+                    },
+                        error: function (jqXHR, textStatus, err) {
+                                console.log(arguments)
+                            }
+                    })
+                })
+            </script>
+            <script>
+                $("#{{ item.shopping_cart_id }}plus").click(function () {
+                    $.ajax({
+                        url: '/shoppingCart/ajax_plus/',
+                        type: 'POST',
+                        data: {
+                            "csrfmiddlewaretoken": $("[name = 'csrfmiddlewaretoken']").val(),
+                            shopping_cart_id: {{ item.shopping_cart_id }},
+                            count: {{ item.count_number }},
+                        },
+                        success: function (data) {
+                            if (data["warning"]){
+                                alert(data["warning"])
+                            }
+                            else {
+                                console.log(data)
+                            }
+                            location.reload()
+
+                    },
+                        error: function (jqXHR, textStatus, err) {
+                                console.log(arguments)
+                            }
+                    })
+                })
+            </script>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if shopping_cart|length is 0 %}
+    {% else %}
+        <button><a href="{% url 'add_order_list' %}">Add to orderList</a></button>
+    {% endif %}
 {% endblock %}

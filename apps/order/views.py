@@ -1,10 +1,14 @@
+import datetime
+from django.utils import timezone
+import pytz
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from apps.order.models import ShoppingCart
+from apps.order.models import ShoppingCart, Order, OrderList
 from apps.goods.models import Product
 from apps.users.models import MyUser
 from django.contrib.sessions.backends.db import SessionStore
+
 
 # Create your views here.
 def show_shopping_cart(request):
@@ -17,25 +21,19 @@ def ajax_shopping_cart_data(request):
         product_id = request.POST.get("product_id", "")
         shopping_cart = ShoppingCart.objects.filter(product_id=product_id)
         if shopping_cart:
-            shopping_cart[0].count_number = shopping_cart[0].count_number + 1
             count_number = shopping_cart[0].count_number
-            shopping_cart[0].save()
-            json_dict = {"code": 0, "msg": "Add shoppingCart successful"}
+            json_dict = {"code": 0, "warning": "The product has been exist"}
         else:
             product = Product.objects.filter(product_id=product_id)[0]
             ShoppingCart.objects.create(product=product, count_number=1)
             count_number = 1
             json_dict = {"code": 0, "msg": "Add shoppingCart successful"}
-        if "shopping_cart" in request.session:
+        if request.session.get('shopping_cart', False):
             request.session["shopping_cart"] = {"product_id": product_id, "count_number": count_number}
-            request.session.save()
             print(request.session)
             print('test1')
         else:
-            s = SessionStore()
-            s["shopping_cart"] = {"product_id": product_id, "count_number": count_number}
-            s.create()
-            print(s)
+            request.session["shopping_cart"] = {"product_id": product_id, "count_number": count_number}
             print('test2')
         return JsonResponse(json_dict)
     else:
@@ -54,9 +52,34 @@ def user_shopping_cart_login(request, product_id):
     return render(request, "user_shoppingCart_login.html", {"product_id": product_id})
 
 
+def shopping_cart_ajax_minus(request):
+    count_number = request.POST.get("count", '')
+    int_count_number = int(count_number)
+    if int_count_number > 1:
+        shopping_cart_id = request.POST.get("shopping_cart_id", '')
+        shopping_cart = ShoppingCart.objects.filter(shopping_cart_id=shopping_cart_id)[0]
+        shopping_cart.count_number = int_count_number - 1
+        shopping_cart.save()
+        data = {"msg": "success"}
+    else:
+        data = {"warning": "the count number cannot be less than one"}
+    return JsonResponse(data)
+
+
+def shopping_cart_ajax_plus(request):
+    count_number = request.POST.get("count", '')
+    int_count_number = int(count_number)
+    shopping_cart_id = request.POST.get("shopping_cart_id", '')
+    shopping_cart = ShoppingCart.objects.filter(shopping_cart_id=shopping_cart_id)[0]
+    shopping_cart.count_number = int_count_number + 1
+    shopping_cart.save()
+    data = {"msg": "success"}
+    return JsonResponse(data)
+
+
 def ajax_login_data(request):
-    if "shopping_cart" in request.session:
-        shopping_cart = request.session.get("shopping_cart")
+    if request.session.get('shopping_cart', False):
+        shopping_cart = request.session["shopping_cart"]
         print(shopping_cart)
         product = Product.objects.filter(product_id=shopping_cart["product_id"])
         count_number = shopping_cart["count_number"]
@@ -88,3 +111,70 @@ def ajax_login_data(request):
         json_dict["code"] = 1004
         json_dict["msg"] = "the username or password is empty"
     return JsonResponse(json_dict)
+
+
+def show_purchase_order(request):
+    orders = Order.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0]).order_by("-purchase_date")
+    print(orders)
+    if len(orders) != 0:
+        return render(request, "purchase_order.html", {"orders": orders})
+    return render(request, "purchase_order.html")
+
+
+def add_purchase_order(request):
+    orders = Order.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0])
+    order_lists = OrderList.objects.all()
+    if len(order_lists) != 0:
+        total_order_amount = 0
+        for order_list in order_lists:
+            total_order_amount = order_list.total_price + total_order_amount
+            order_lists[0].order.total_order_amount = total_order_amount
+        if len(orders) != 0:
+            order = orders[len(orders) - 1]
+            order.total_order_amount = total_order_amount
+            order.purchase_date = timezone.now()
+            order.save()
+            order_lists.delete()
+    return render(request, "purchase_order.html", {"orders":  Order.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0]).order_by('-purchase_date')})
+
+
+def show_order_list(request):
+    order_lists = OrderList.objects.all()
+    return render(request, "order_list.html", {"order_lists": order_lists})
+
+
+def add_order_list(request):
+    if len(ShoppingCart.objects.all()) != 0:
+        total_price = 0
+        count_number = 0
+        price = 0
+        shopping_carts = ShoppingCart.objects.all()
+        user = MyUser.objects.filter(username=request.user.username)[0]
+        if len(Order.objects.filter(user=user)) == 0 or Order.objects.filter(user=user)[
+            len(Order.objects.filter(user=user)) - 1].total_order_amount != 0:
+            Order(purchase_order_status=(0, "pending"), total_order_amount="0", user=user).save()
+            orders = Order.objects.all()
+            order = orders[len(orders) - 1]
+        else:
+            order = Order.objects.filter(user=user)[len(Order.objects.all()) - 1]
+        for shopping_cart in shopping_carts:
+            order_list_product = shopping_cart.product
+            order_list_product_count = shopping_cart.count_number
+            count_number = order_list_product_count + count_number
+            product_price = order_list_product.price * order_list_product_count
+            price = product_price + price
+            total_price = total_price + price
+            OrderList.objects.create(total_price=price, total_number=order_list_product_count,
+                                     product=order_list_product,
+                                     order=order)
+            shopping_cart.delete()
+        order_lists = OrderList.objects.all()
+        return render(request, "order_list.html", {"order_lists": order_lists, "total_price": total_price,
+                                                   "count_number": count_number})
+    else:
+        return render(request, "order_list.html")
+
+
+def show_order_detail(request, order_id):
+    order = Order.objects.filter(order_id=order_id)[0]
+    return render(request, 'order_detail.html', {"order": order})

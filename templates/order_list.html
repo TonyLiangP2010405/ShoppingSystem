@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>products price</th>
+                <th>products number</th>
+                <th>product</th>
+                <th>product image</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order_list in order_lists %}
+                <tr>
+                    <td>{{ order_list.total_price }}</td>
+                    <td>{{ order_list.total_number }}</td>
+                    <td>{{ order_list.product.name }}</td>
+                    <td><img src="/media/{{ order_list.product.main_image }}" alt="product image" width="100" height="100"></td>
+                </tr>
+            {% endfor %}
+            <div>
+                total price: {{ total_price }}
+            </div>
+            <div>
+                total number: {{ count_number }}
+            </div>
+        </tbody>
+    </table>
+    {% if order_lists|length is 0 %}
+    {% else %}
+        <button><a href="{% url 'add_order' %}">Buy and Go to order</a></button>
+    {% endif %}
+{% endblock %}

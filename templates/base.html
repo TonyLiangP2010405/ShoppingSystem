@@ -18,11 +18,15 @@
         {% if request.user.is_superuser %}
         {% else %}
             <li class="nav-item"><a class="nav-link" href="{% url 'shopping_cart' %}">ShoppingCart</a></li>
+
         {% endif %}
         {% if request.user.is_authenticated %}
             {{ request.user.username }}
+            <li class="nav-item"><a class="nav-link" href="{% url 'show_order' %}">My Order</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'show_order_list' %}">My Order List</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">logout</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'change_password' %}">change password</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'add_shipping_address' %}">user add shipping address</a></li>
 
             {% if request.user.is_superuser %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'add_product' %}">add product</a></li>
@@ -30,7 +34,6 @@
             {% endif %}
         {% else %}
             <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">register</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'add_shipping_address' %}">user add shipping address</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">login</a></li>
         {% endif %}
     </ul>

@@ -72,8 +72,8 @@ def user_login(request):
 
 
 def ajax_login_data(request):
-    if "shopping_cart" in request.session:
-        shopping_cart = request.session.get("shopping_cart")
+    if request.session.get('shopping_cart', False):
+        shopping_cart = request.session["shopping_cart"]
         print(shopping_cart)
         product = Product.objects.filter(product_id=shopping_cart["product_id"])
         count_number = shopping_cart["count_number"]

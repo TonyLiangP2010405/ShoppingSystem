@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>P.O.number</th>
+                <th>shipped date</th>
+                <th>total order amount</th>
+                <th>purchase order status</th>
+                <th>purchase order date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+                {% if order.total_order_amount == 0 %}
+                {% else %}
+                    <tr>
+                        <td><a href="{% url 'order_detail' order.order_id%}">{{ order.order_id }}</a></td>
+                        <td>{{ order.shipped_date }}</td>
+                        <td>{{ order.total_order_amount }}</td>
+                        <td>{{ order.purchase_order_status }}</td>
+                        <td>{{ order.purchase_date }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
