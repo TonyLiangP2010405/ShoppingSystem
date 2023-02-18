@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <table class="table table-striped">
+    {% csrf_token %}
+    <input id="past" type="button" value="past purchases">
+    <input id="now" type="button" value="current purchases">
+    <input id="all" type="button" value="All purchases">
+    <table class="table table-striped" id="recover">
         <thead>
             <tr>
                 <th>P.O.number</th>
@@ -9,21 +13,150 @@
                 <th>total order amount</th>
                 <th>purchase order status</th>
                 <th>purchase order date</th>
+                <th>cancelled Date</th>
             </tr>
         </thead>
         <tbody>
             {% for order in orders %}
                 {% if order.total_order_amount == 0 %}
                 {% else %}
-                    <tr>
-                        <td><a href="{% url 'order_detail' order.order_id%}">{{ order.order_id }}</a></td>
-                        <td>{{ order.shipped_date }}</td>
-                        <td>{{ order.total_order_amount }}</td>
-                        <td>{{ order.purchase_order_status }}</td>
-                        <td>{{ order.purchase_date }}</td>
+                    <tr id="tr">
+                        <td id="{{ order.order_id }}" data-url="{% url 'order_detail' order.order_id%}"><a href="{% url 'order_detail' order.order_id%}">{{ order.order_id }}</a></td>
+                        {% if order.shipped_date == '' %}
+                            <td id="{{ order.order_id }}shipped">{{ order.shipped_date }}</td>
+                        {% else %}
+                            <td id="{{ order.order_id }}shipped">No shipped date</td>
+                        {% endif %}
+                        <td id="{{order.order_id}}amount">{{ order.total_order_amount }}</td>
+                        <td class="check" id="{{ order.order_id }}status">{{ order.purchase_order_status }}</td>
+                        <td id="{{ order.order_id }}date">{{ order.purchase_date }}</td>
+                        {% if order.cancelDate == NULL %}
+                            <td id="{{ order.order_id }}cancelled">No cancelled Data <input type="button" value="cancel" id="{{ order.order_id }}cancel"></td>
+                        {% else %}
+                            <td id="{{ order.order_id }}cancelled">{{ order.cancel_user_type }} {{ order.cancelDate }}</td>
+                        {% endif %}
                     </tr>
                 {% endif %}
+                <script>
+                    $('#{{ order.order_id }}cancel').click(function () {
+                        $.ajax({
+                            url: '/purchase_order/ajax_cancel/',
+                            type: "POST",
+                            data: {
+                                "order_id": {{ order.order_id }},
+                                "csrfmiddlewaretoken": $("[name = 'csrfmiddlewaretoken']").val(),
+                            },
+                            success(data){
+                                location.reload()
+                            },
+                            error(e){
+                                console.log(e)
+                            }
+                        })
+                    })
+                </script>
             {% endfor %}
         </tbody>
     </table>
+    <script>
+        $("#all").click(function () {
+            location.reload()
+        })
+    </script>
+    <script>
+        $(document).on('click', '#past', function () {
+            var order_quantity = 0
+            $.ajax({
+                url: '/purchase_order/ajax_order_quantity/',
+                type: 'get',
+                success(data) {
+                    order_quantity = data['order_quantity']
+                    var td = document.getElementsByClassName("check").length
+                    if (td === order_quantity) {
+                        filter_data()
+                    }
+                    else {
+                        var recoverButton = document.getElementById("all")
+                        recoverButton.click()
+                    }
+                    function filter_data() {
+                        {% for order in orders %}
+                            {% if order.total_order_amount == 0 %}
+                            {% else %}
+                                {% if order.purchase_order_status == "shipped" or order.purchase_order_status == "cancelled" %}
+                                    $('#{{ order.order_id }}').html('<td id="{{ order.order_id }}"><a href="{% url 'order_detail' order.order_id%}">{{ order.order_id }}</a></td>')
+                                    $('#{{order.order_id}}shipped').html('<td id="{{order.order_id}}shipped">{% if order.shipped_date == '' %}{{ order.shipped_date }}{% else %} <td id="{{ order.order_id }}shipped">No shipped date</td>{% endif %}</td>')
+                                    $('#{{order.order_id}}amount').html('<td id="{{order.order_id}}amount">{{ order.total_order_amount }}</td>')
+                                    $('#{{ order.order_id }}status').html('<td class="check" id="{{ order.order_id }}status">{{ order.purchase_order_status }}</td>')
+                                    $('#{{ order.order_id }}date').html('<td id="{{ order.order_id }}date">{{ order.purchase_date }}</td>')
+                                    $('#{{ order.order_id }}cancelled').html('{% if order.cancelDate == NULL %}<td id="{{ order.order_id }}cancelled">No cancelled Data <input type="button" value="cancel" id="{{ order.order_id }}cancel"></td>{% else %}<td id="{{ order.order_id }}cancelled">{{ order.cancel_user_type }} {{ order.cancelDate }}</td>{% endif %}')
+                                {% else %}
+
+                                    $('#{{ order.order_id }}').remove()
+                                    $('#{{ order.order_id }}shipped').remove()
+                                    $('#{{order.order_id}}amount').remove()
+                                    $('#{{ order.order_id }}status').remove()
+                                    $('#{{order.order_id}}date').remove()
+                                    $('#{{ order.order_id }}cancelled').remove()
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+            }
+
+                },
+                error(e) {
+                    console.log(e)
+                }
+            })
+
+        })
+    </script>
+    <script>
+        $(document).on('click', '#now', function () {
+            var order_quantity = 0
+            $.ajax({
+                url: '/purchase_order/ajax_order_quantity/',
+                type: 'get',
+                success(data) {
+                    order_quantity = data['order_quantity']
+                    var td = document.getElementsByClassName("check").length
+                    if (td === order_quantity) {
+                        filter_data()
+                    }
+                    else {
+                        var recoverButton = document.getElementById("all")
+                        recoverButton.click()
+                    }
+                    function filter_data() {
+                        {% for order in orders %}
+                            {% if order.total_order_amount == 0 %}
+                            {% else %}
+                                {% if order.purchase_order_status == "pending" or order.purchase_order_status == "hold" %}
+                                    $('#{{ order.order_id }}').html('<td id="{{ order.order_id }}"><a href="{% url 'order_detail' order.order_id%}">{{ order.order_id }}</a></td>')
+                                    $('#{{order.order_id}}shipped').html('<td id="{{order.order_id}}shipped">{% if order.shipped_date == '' %}{{ order.shipped_date }}{% else %} <td id="{{ order.order_id }}shipped">No shipped date</td>{% endif %}</td>')
+                                    $('#{{order.order_id}}amount').html('<td id="{{order.order_id}}amount">{{ order.total_order_amount }}</td>')
+                                    $('#{{ order.order_id }}status').html('<td class="check" id="{{ order.order_id }}status">{{ order.purchase_order_status }}</td>')
+                                    $('#{{ order.order_id }}date').html('<td id="{{ order.order_id }}date">{{ order.purchase_date }}</td>')
+                                    $('#{{ order.order_id }}cancelled').html('{% if order.cancelDate == NULL %}<td id="{{ order.order_id }}cancelled">No cancelled Data <input type="button" value="cancel" id="{{ order.order_id }}cancel"></td>{% else %}<td id="{{ order.order_id }}cancelled">{{ order.cancel_user_type }} {{ order.cancelDate }}</td>{% endif %}')
+                                {% else %}
+
+                                    $('#{{ order.order_id }}').remove()
+                                    $('#{{ order.order_id }}shipped').remove()
+                                    $('#{{order.order_id}}amount').remove()
+                                    $('#{{ order.order_id }}status').remove()
+                                    $('#{{order.order_id}}date').remove()
+                                    $('#{{ order.order_id }}cancelled').remove()
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+            }
+
+                },
+                error(e) {
+                    console.log(e)
+                }
+            })
+
+        })
+    </script>
 {% endblock %}

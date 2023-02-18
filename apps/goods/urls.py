@@ -12,6 +12,7 @@ urlpatterns = [
     path('product_change/<int:product_id>', views.product_change, name='product_change'),
     path('product_delete/<int:product_id>', views.product_delete, name='product_delete'),
     path('change_photo/<int:product_id>', views.product_change_photo, name='product_change_photo'),
-    path('ajax_change_photo/', views.product_ajax_photo_change)
+    path('ajax_change_photo/', views.product_ajax_photo_change),
+    path('categories/', views.get_category, name="category"),
 ]
 

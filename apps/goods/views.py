@@ -332,3 +332,8 @@ def product_ajax_photo_change(request):
         Product.objects.filter(product_id=product_id).update(photo4='')
         return redirect("products")
     return redirect("products")
+
+
+def get_category(request):
+    categories = ProductsCategory.objects.all()
+    return render(request, "show_product_categories.html", {"categories": categories})

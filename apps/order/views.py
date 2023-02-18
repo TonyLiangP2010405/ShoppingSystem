@@ -1,13 +1,11 @@
-import datetime
-from django.utils import timezone
-import pytz
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
-from apps.order.models import ShoppingCart, Order, OrderList
+from django.shortcuts import render
+from django.utils import timezone
+
 from apps.goods.models import Product
+from apps.order.models import ShoppingCart, Order, OrderList
 from apps.users.models import MyUser
-from django.contrib.sessions.backends.db import SessionStore
 
 
 # Create your views here.
@@ -114,7 +112,8 @@ def ajax_login_data(request):
 
 
 def show_purchase_order(request):
-    orders = Order.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0]).order_by("-purchase_date")
+    orders = Order.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0]).order_by(
+        "-purchase_date")
     print(orders)
     if len(orders) != 0:
         return render(request, "purchase_order.html", {"orders": orders})
@@ -124,18 +123,26 @@ def show_purchase_order(request):
 def add_purchase_order(request):
     orders = Order.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0])
     order_lists = OrderList.objects.all()
+    product_json = {}
+    product_list = []
     if len(order_lists) != 0:
         total_order_amount = 0
         for order_list in order_lists:
             total_order_amount = order_list.total_price + total_order_amount
             order_lists[0].order.total_order_amount = total_order_amount
         if len(orders) != 0:
+            for i in range(len(order_lists)):
+                product_list.append(order_lists[i].product.product_id)
+            product_json["product_id_list"] = product_list
             order = orders[len(orders) - 1]
             order.total_order_amount = total_order_amount
             order.purchase_date = timezone.now()
+            order.product_json = product_json
             order.save()
             order_lists.delete()
-    return render(request, "purchase_order.html", {"orders":  Order.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0]).order_by('-purchase_date')})
+    return render(request, "purchase_order.html", {
+        "orders": Order.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0]).order_by(
+            '-purchase_date')})
 
 
 def show_order_list(request):
@@ -152,7 +159,7 @@ def add_order_list(request):
         user = MyUser.objects.filter(username=request.user.username)[0]
         if len(Order.objects.filter(user=user)) == 0 or Order.objects.filter(user=user)[
             len(Order.objects.filter(user=user)) - 1].total_order_amount != 0:
-            Order(purchase_order_status=(0, "pending"), total_order_amount="0", user=user).save()
+            Order(purchase_order_status="pending", total_order_amount="0", user=user).save()
             orders = Order.objects.all()
             order = orders[len(orders) - 1]
         else:
@@ -161,7 +168,11 @@ def add_order_list(request):
             order_list_product = shopping_cart.product
             order_list_product_count = shopping_cart.count_number
             count_number = order_list_product_count + count_number
+            shopping_cart.product.sale_number = shopping_cart.count_number
+            shopping_cart.product.save()
             product_price = order_list_product.price * order_list_product_count
+            shopping_cart.product.sale_amount = product_price
+            shopping_cart.product.save()
             price = product_price + price
             total_price = total_price + price
             OrderList.objects.create(total_price=price, total_number=order_list_product_count,
@@ -177,4 +188,53 @@ def add_order_list(request):
 
 def show_order_detail(request, order_id):
     order = Order.objects.filter(order_id=order_id)[0]
-    return render(request, 'order_detail.html', {"order": order})
+    product_id_list = order.product_json["product_id_list"]
+    product_list = []
+    for product_id in product_id_list:
+        product = Product.objects.filter(product_id=product_id)[0]
+        product_list.append(product)
+    return render(request, 'order_detail.html', {"order": order, "product_list": product_list})
+
+
+def filter_order_ajax(request):
+    group = request.POST.get('group', '')
+    print(group)
+    if int(group) == 1:
+        orders = Order.objects.filter(purchase_order_status="pending" or "hold").order_by("-purchase_date")
+        order_list = []
+        for order in orders:
+            order_list.append(order)
+        json_dict = {"orders": order_list}
+        print(json_dict)
+        return JsonResponse(json_dict)
+    if group == 2:
+        orders = Order.objects.filter(purchase_order_status="shipped" or "cancelled").order_by("-purchase_data")
+        order_list = []
+        for order in orders:
+            order_list.append(order)
+        json_dict = {"orders": order_list}
+        print(json_dict)
+        return JsonResponse(json_dict)
+    return JsonResponse({"error": "error"})
+
+
+def order_check_user_ajax(request):
+    order_id = request.POST.get("order_id", '')
+    order = Order.objects.filter(order_id=order_id)[0]
+    if request.user.is_superuser:
+        order.cancel_user_type = 'vendor'
+        order.cancelDate = timezone.now()
+        order.purchase_order_status = 'cancelled'
+        order.save()
+    else:
+        order.cancel_user_type = 'customer'
+        order.cancelDate = timezone.now()
+        order.purchase_order_status = 'cancelled'
+        order.save()
+    return JsonResponse({"msg": "success"})
+
+
+def get_order_quantity(request):
+    order_quantity = Order.objects.all().count()
+    print(order_quantity)
+    return JsonResponse({"order_quantity": order_quantity})

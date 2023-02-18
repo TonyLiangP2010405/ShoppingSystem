@@ -15,4 +15,7 @@ urlpatterns = [
     path('purchase_order/order_detail/<int:order_id>', views.show_order_detail, name='order_detail'),
     path('shoppingCart/ajax_minus/', views.shopping_cart_ajax_minus),
     path('shoppingCart/ajax_plus/', views.shopping_cart_ajax_plus),
+    path('purchase_order/filter_order_ajax/', views.filter_order_ajax),
+    path('purchase_order/ajax_cancel/', views.order_check_user_ajax),
+    path('purchase_order/ajax_order_quantity/', views.get_order_quantity),
 ]

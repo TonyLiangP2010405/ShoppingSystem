@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+    {% csrf_token %}
     <table class="table table-striped">
         <thead>
             <tr>
@@ -10,17 +11,54 @@
                 <th>shipped_date</th>
                 <th>cancelDate</th>
                 <th>user</th>
+                {% for product in product_list %}
+                    <th>product information</th>
+                {% endfor %}
             </tr>
         </thead>
         <tbody>
             <tr>
-                <th>{{ order.order_id }}</th>
-                <th>{{ order.total_order_amount }}</th>
-                <th>{{ order.purchase_order_status }}</th>
-                <th>{{ order.shipped_date }}</th>
-                <th>{{ order.cancelDate }}</th>
-                <th>{{ order.user.username }}</th>
+                <td>{{ order.order_id }}</td>
+                <td>{{ order.total_order_amount }}</td>
+                <td>{{ order.purchase_order_status }}</td>
+                {% if order.shipped_date == '' %}
+                    <td id="{{ order.order_id }}">{{ order.shipped_date }}</td>
+                {% else %}
+                    <td id="{{ order.order_id }}">No shipped date</td>
+                {% endif %}
+                {% if order.cancelDate == NULL %}
+                    <td id="{{ order.order_id }}cancelled">No cancelled Data <input type="button" value="cancel" id="{{ order.order_id }}cancel"></td>
+                {% else %}
+                    <td id="{{ order.order_id }}cancelled">{{ order.cancel_user_type }} {{ order.cancelDate }}</td>
+                {% endif %}
+                <td>{{ order.user.username }}</td>
+                {% for product in product_list %}
+                    <td>
+                        <div>product Name: {{ product.name }}</div>
+                        <div>product Number: {{ product.sale_number }}</div>
+                        <div>product Price: {{ product.price }}</div>
+                        <div>subtotal: {{ product.sale_amount }}</div>
+                    </td>
+                {% endfor %}
             </tr>
         </tbody>
     </table>
+    <script>
+        $('#{{ order.order_id }}cancel').click(function () {
+            $.ajax({
+                url: '/purchase_order/ajax_cancel/',
+                type: "POST",
+                data: {
+                    "order_id": {{ order.order_id }},
+                    "csrfmiddlewaretoken": $("[name = 'csrfmiddlewaretoken']").val(),
+                },
+                success(data){
+                    location.reload()
+                },
+                error(e){
+                    console.log(e)
+                }
+            })
+        })
+    </script>
 {% endblock %}

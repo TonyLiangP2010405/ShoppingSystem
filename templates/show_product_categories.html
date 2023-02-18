@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>category_id</th>
+                <th>category_name</th>
+                <th>createDate</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+                <tr>
+                    <td>{{ category.category_id }}</td>
+                    <td>{{ category.name }}</td>
+                    <td>{{ category.createDate }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

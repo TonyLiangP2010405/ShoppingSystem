@@ -20,6 +20,8 @@ class Order(models.Model):
     purchase_date = models.DateTimeField(blank=True, null=True)
     cancelDate = models.DateTimeField(blank=True, null=True)
     user = models.ForeignKey(MyUser, on_delete=models.DO_NOTHING)
+    cancel_user_type = models.CharField(max_length=100, blank=True, null=True)
+    product_json = models.JSONField(blank=True, null=True)
 
     def __str__(self):
         return str(self.order_id)
