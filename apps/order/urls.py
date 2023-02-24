@@ -18,4 +18,9 @@ urlpatterns = [
     path('purchase_order/filter_order_ajax/', views.filter_order_ajax),
     path('purchase_order/ajax_cancel/', views.order_check_user_ajax),
     path('purchase_order/ajax_order_quantity/', views.get_order_quantity),
+    path('show_vendor_order/', views.show_vendor_order, name="vendor_order"),
+    path('purchase_order/ajax_shipped/', views.ajax_shipped),
+    path('purchase_order/search/', views.ajax_search),
+    path('purchase_order/ajax_hold/', views.ajax_hold),
+    path('purchase_order/ajax_unhold/', views.ajax_unhold),
 ]

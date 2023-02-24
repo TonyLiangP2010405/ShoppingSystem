@@ -28,24 +28,12 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <label>category: </label>
-                                <select id="category_id">
-                                    <option selected value=''>please choose...</option>
-                                        {% for category in categorys %}
-                                            <option value="{{ category.category_id }}">{{ category.name }}</option>
-                                        {% endfor %}
-                                </select>
-                            </li>
-                            <li>
                                 <label>Product name: </label>
                                 <input type="text" id="product_name" name="product_name" value="" />
                             </li>
                             <li>
-                                <label>Status: </label>
-                                <select id="temporary_status" name="temporary_status">
-                                        <option value="0">out-of-stock</option>
-                                        <option value="1">normal</option>
-                                    </select>
+                                <label>Product ID:</label>
+                                <input type="text" id="product_id" name="product_id" value="">
                             </li>
                             <li>
                                 <a  class="btn btn-primary btn-rounded btn-sm" id="btn_search"><i class="fa fa-search"></i>Search</a>
@@ -136,8 +124,7 @@
                 var temp = {
                   page:(params.offset / params.limit) + 1,
                   name: $("#product_name").val(),
-                  category: $("#category_id").val(),
-                  temporary_status: $("#temporary_status").val(),
+                  product_id: $("#product_id").val(),
                 };
                 return temp;
             },

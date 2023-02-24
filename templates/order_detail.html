@@ -14,6 +14,8 @@
                 {% for product in product_list %}
                     <th>product information</th>
                 {% endfor %}
+                <th>shipped</th>
+                <th>hold or unhold</th>
             </tr>
         </thead>
         <tbody>
@@ -21,13 +23,13 @@
                 <td>{{ order.order_id }}</td>
                 <td>{{ order.total_order_amount }}</td>
                 <td>{{ order.purchase_order_status }}</td>
-                {% if order.shipped_date == '' %}
-                    <td id="{{ order.order_id }}">{{ order.shipped_date }}</td>
-                {% else %}
+                {% if order.shipped_date == NULL %}
                     <td id="{{ order.order_id }}">No shipped date</td>
+                {% else %}
+                    <td id="{{ order.order_id }}">{{ order.shipped_date }}</td>
                 {% endif %}
                 {% if order.cancelDate == NULL %}
-                    <td id="{{ order.order_id }}cancelled">No cancelled Data <input type="button" value="cancel" id="{{ order.order_id }}cancel"></td>
+                    <td id="{{ order.order_id }}cancelled">No cancelled Date <input type="button" value="cancel" id="{{ order.order_id }}cancel"></td>
                 {% else %}
                     <td id="{{ order.order_id }}cancelled">{{ order.cancel_user_type }} {{ order.cancelDate }}</td>
                 {% endif %}
@@ -40,9 +42,78 @@
                         <div>subtotal: {{ product.sale_amount }}</div>
                     </td>
                 {% endfor %}
+            {% if order.shipped_date == NULL %}
+                <td><input type="button" id="change_shipped" value="shipped"></td>
+            {% else %}
+                <td>No Process can do</td>
+            {% endif %}
+            {% if order.purchase_order_status == "pending" or order.purchase_order_status == "hold" %}
+                {% if order.purchase_order_status == "pending" %}
+                    <td id="{{ order.order_id }}hold"><input id="{{ order.order_id }}change_hold" type="button" value="change_hold"></td>
+                {% endif %}
+                {% if order.purchase_order_status == "hold" %}
+                    <td id="{{ order.order_id }}hold"><input id="{{ order.order_id }}change_unhold" type="button" value="change_unhold"></td>
+                {% endif %}
+            {% else %}
+                <td id="{{ order.order_id }}hold">Cannot use hold or unhold</td>
+            {% endif %}
             </tr>
         </tbody>
     </table>
+    <script>
+        $("#{{ order.order_id }}change_unhold").click(function () {
+            $.ajax({
+                url: '/purchase_order/ajax_unhold/',
+                type: "POST",
+                data: {
+                  "order_id": {{ order.order_id }},
+                  "csrfmiddlewaretoken": $("[name = 'csrfmiddlewaretoken']").val(),
+                },
+                success(data) {
+                    location.reload()
+                },
+                error(e) {
+                    console.log(e)
+                }
+            })
+        })
+    </script>
+    <script>
+        $("#{{ order.order_id }}change_hold").click(function () {
+            $.ajax({
+                url: '/purchase_order/ajax_hold/',
+                type: "POST",
+                data: {
+                  "order_id": {{ order.order_id }},
+                  "csrfmiddlewaretoken": $("[name = 'csrfmiddlewaretoken']").val(),
+                },
+                success(data) {
+                    location.reload()
+                },
+                error(e) {
+                    console.log(e)
+                }
+            })
+        })
+    </script>
+    <script>
+        $("#change_shipped").click(function () {
+            $.ajax({
+                url: '/purchase_order/ajax_shipped/',
+                type: "POST",
+                data: {
+                    "order_id": {{ order.order_id }},
+                    "csrfmiddlewaretoken": $("[name = 'csrfmiddlewaretoken']").val(),
+                },
+                success(data){
+                    location.reload()
+                },
+                error(e){
+                    console.log(e)
+                }
+            })
+        })
+    </script>
     <script>
         $('#{{ order.order_id }}cancel').click(function () {
             $.ajax({

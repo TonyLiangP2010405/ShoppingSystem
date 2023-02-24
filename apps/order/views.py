@@ -238,3 +238,46 @@ def get_order_quantity(request):
     order_quantity = Order.objects.all().count()
     print(order_quantity)
     return JsonResponse({"order_quantity": order_quantity})
+
+
+def show_vendor_order(request):
+    orders = Order.objects.all().order_by("-purchase_date")
+    return render(request, "purchase_order.html", {"orders": orders})
+
+
+def ajax_shipped(request):
+    order_id = request.POST.get("order_id", '')
+    order = Order.objects.filter(order_id=order_id)[0]
+    order.shipped_date = timezone.now()
+    order.save()
+    return JsonResponse({"msg": "success"})
+
+
+def ajax_search(request):
+    order_id = request.POST.get("order_id", '')
+    print(order_id)
+    if order_id == '':
+        return JsonResponse({"msg": "reload"})
+    else:
+        order = Order.objects.filter(order_id=order_id)
+        if len(order) != 0:
+            return JsonResponse({"msg": "success"})
+        else:
+            return JsonResponse({"msg": "fail"})
+
+
+def ajax_hold(request):
+    order_id = request.POST.get("order_id", '')
+    order = Order.objects.filter(order_id=order_id)[0]
+    order.purchase_order_status = "hold"
+    order.save()
+    return JsonResponse({"msg": "success"})
+
+
+def ajax_unhold(request):
+    order_id = request.POST.get("order_id", '')
+    order = Order.objects.filter(order_id=order_id)[0]
+    order.purchase_order_status = "shipped"
+    order.shipped_date = timezone.now()
+    order.save()
+    return JsonResponse({"msg": "success"})

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from apps.goods.models import Product, ProductsCategory
 from django.http import JsonResponse
-from apps.goods.forms import ProductInfo, ProductInfoChange, ProductPhotoChange
+from apps.goods.forms import ProductInfo, ProductInfoChange, ProductPhotoChange, ProductsCategoryInfo
 import os
 
 from shoppingSystem import settings
@@ -27,12 +27,11 @@ def product_detail(request, product_id):
 
 def ajax_products(request):
     print(request.GET)
+    product_id = request.GET.get("product_id", '')
     product_name = request.GET.get("name", '')
-    category_id = request.GET.get("category_id", '')
-    temporary_status = request.GET.get("temporary_status", '')
     page_size = 2
     page = int(request.GET["page"])
-    if product_name == "" and category_id == "":
+    if product_name == "" and product_id == "":
         total = Product.objects.all().count()
         products = Product.objects.all().order_by("product_id")[(page - 1) * page_size: page * page_size]
         rows = []
@@ -57,11 +56,14 @@ def ajax_products(request):
             })
         datas = {"total": total, "rows": rows}
     else:
-        total = Product.objects.filter(name=product_name,
-                                       temporary_status=temporary_status).count()
-        products = Product.objects.filter(name=product_name,
-                                          temporary_status=temporary_status).order_by("product_id")[
+        if product_id != "":
+            total = Product.objects.filter(product_id=product_id).count()
+            products = Product.objects.filter(product_id=product_id).order_by("product_id")[
                    (page - 1) * page_size: page * page_size]
+        else:
+            total = Product.objects.filter(name=product_name).count()
+            products = Product.objects.filter(name=product_name).order_by("product_id")[
+                       (page - 1) * page_size: page * page_size]
         rows = []
         for product in products:
             rows.append({
@@ -337,3 +339,24 @@ def product_ajax_photo_change(request):
 def get_category(request):
     categories = ProductsCategory.objects.all()
     return render(request, "show_product_categories.html", {"categories": categories})
+
+
+def get_category_detail(request, category_id):
+    category = ProductsCategory.objects.filter(category_id=category_id)[0]
+    return render(request, "show_product_category_detailed.html", {"category": category})
+
+
+def add_categories(request):
+    if request.method == "GET":
+        form_obj = ProductsCategoryInfo()
+        return render(request, "add_category.html", {"form_obj": form_obj})
+    if request.method == "POST":
+        print(request.POST)
+        category_name = request.POST.get("name", '')
+        categories = ProductsCategory.objects.all()
+        for category in categories:
+            if category.name == category_name:
+                return render(request, "add_category.html", {"errors": "the category has been existed"})
+            else:
+                ProductsCategory.objects.create(name=category_name)
+                return redirect('category')

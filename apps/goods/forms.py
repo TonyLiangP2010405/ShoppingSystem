@@ -10,6 +10,11 @@ class ProductsCategoryInfo(forms.ModelForm):
         labels = {
             "name": "product_category_name"
         }
+        widgets = {
+            "name": forms.widgets.TextInput(attrs={
+                "class": "form-control"
+            }),
+        }
         error_messages = {
             "name": {'required': 'the product category name cannot be empty'}
         }

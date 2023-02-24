@@ -10,13 +10,11 @@
             </tr>
         </thead>
         <tbody>
-            {% for category in categories %}
-                <tr>
-                    <td><a href="{% url 'category_detail' category.category_id %}">{{ category.category_id }}</a></td>
-                    <td>{{ category.name }}</td>
-                    <td>{{ category.createDate }}</td>
-                </tr>
-            {% endfor %}
+            <tr>
+                <td>{{ category.category_id }}</td>
+                <td>{{ category.name }}</td>
+                <td>{{ category.createDate }}</td>
+            </tr>
         </tbody>
     </table>
 {% endblock %}

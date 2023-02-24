@@ -14,5 +14,7 @@ urlpatterns = [
     path('change_photo/<int:product_id>', views.product_change_photo, name='product_change_photo'),
     path('ajax_change_photo/', views.product_ajax_photo_change),
     path('categories/', views.get_category, name="category"),
+    path('categories/<int:category_id>', views.get_category_detail, name="category_detail"),
+    path('categories/add_categories', views.add_categories, name="add_category"),
 ]
 

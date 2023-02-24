@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <form novalidate action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3 mt-3">
+            <label for="{{ form_obj.name.id_for_label }}" class="form-label">{{ form_obj.name.label }}</label>
+            <div class="col-sm-offset-10">
+                    {{ form_obj.name }}
+                <span class="help-block">{{ errors }}</span>
+            </div>
+        </div>
+        <input type="submit" value="Add" class="btn btn-success">
+    </form>
+{% endblock %}
