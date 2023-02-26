@@ -86,8 +86,8 @@ def ajax_login_data(request):
     uname = request.POST.get("username", '')
     pwd = request.POST.get("password", '')
     json_dict = {}
-    if uname and pwd:
-        if MyUser.objects.filter(username=uname):
+    if uname != '' and pwd != '':
+        if len(MyUser.objects.filter(username=uname)) != 0:
             user = authenticate(username=uname, password=pwd)
             if user:
                 if user.is_active:
@@ -95,7 +95,6 @@ def ajax_login_data(request):
                     json_dict["code"] = 1000
                     json_dict["msg"] = "login successful"
                     json_dict["url"] = '/products/customer/' + product_id
-                    print(json_dict)
                 else:
                     json_dict["code"] = 1001
                     json_dict["msg"] = "the user doesn't active"

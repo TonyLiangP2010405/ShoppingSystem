@@ -35,7 +35,18 @@
                     "csrfmiddlewaretoken": $("[name = 'csrfmiddlewaretoken']").val()
                 },
                 success: function (data) {
-                    window.location = data['url']
+                    if (data['code'] === 1002){
+                        alert(data['msg'])
+                    }
+                    if(data["code"] === 1004){
+                        alert(data['msg'])
+                    }
+                    if(data["code"] === 1003){
+                        alert(data['msg'])
+                    }
+                    else {
+                        window.location = data['url']
+                    }
                 },
                 error: function (jqXHR, textStatus, err) {
                     console.log(arguments)

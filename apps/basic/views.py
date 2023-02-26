@@ -1,3 +1,5 @@
+from django.core.paginator import PageNotAnInteger, Paginator, EmptyPage
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from apps.basic.forms import ShippingAddressInfo
 from apps.basic.models import ShippingAddress
@@ -6,8 +8,61 @@ from apps.goods.models import Product
 
 # Create your views here.
 def home_page(request):
-    products = Product.objects.all()
-    return render(request, "homePage.html", {"products": products})
+    datas = Product.objects.all().order_by("product_id")
+    p = Paginator(datas, 5)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = p.get_page(page_number)
+    except PageNotAnInteger:
+        page_obj = p.page(1)
+    except EmptyPage:
+        page_obj = p.page(p.num_pages)
+    return render(request, "homePage.html", {"products": page_obj})
+
+
+def home_page_filter(request):
+    datas = Product.objects.all().order_by("category_id")
+    p = Paginator(datas, 5)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = p.get_page(page_number)
+    except PageNotAnInteger:
+        page_obj = p.page(1)
+    except EmptyPage:
+        page_obj = p.page(p.num_pages)
+    return render(request, "homePage.html", {"products": page_obj})
+
+
+def ajax_search(request):
+    product_name = request.POST.get("product_name", '')
+    url = "/filter_product_name/?name="+ product_name
+    return JsonResponse({"url": url})
+
+
+def filter_product(request):
+    name = request.GET.get("name", '')
+    if name:
+        datas = Product.objects.filter(name=name).order_by("product_id")
+        p = Paginator(datas, 5)
+        page_number = request.GET.get('page')
+        try:
+            page_obj = p.get_page(page_number)
+        except PageNotAnInteger:
+            page_obj = p.page(1)
+        except EmptyPage:
+            page_obj = p.page(p.num_pages)
+        return render(request, "homePage.html", {"products": page_obj})
+    else:
+        datas = Product.objects.all().order_by("product_id")
+        p = Paginator(datas, 5)
+        page_number = request.GET.get('page')
+        try:
+            page_obj = p.get_page(page_number)
+        except PageNotAnInteger:
+            page_obj = p.page(1)
+        except EmptyPage:
+            page_obj = p.page(p.num_pages)
+        return render(request, "homePage.html", {"products": page_obj})
 
 
 def add_shipping_address(request):

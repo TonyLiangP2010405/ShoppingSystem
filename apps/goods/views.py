@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect
 from apps.goods.models import Product, ProductsCategory
 from django.http import JsonResponse
@@ -9,13 +10,30 @@ from shoppingSystem import settings
 
 # Create your views here.
 def user_product_view(request):
-    products = Product.objects.all()
-    return render(request, "products.html", {"products": products})
+    if request.method == "GET":
+        datas = Product.objects.all()
+        page_size = 2
+        try:
+            if not request.GET.get("page"):
+                curr_page = 1
+            curr_page = int(request.GET.get("page"))
+        except:
+            curr_page = 1
+        paginator = Paginator(datas, page_size)
+        try:
+            products = paginator.page(curr_page)
+        except PageNotAnInteger:
+            products = paginator.page(1)
+        except EmptyPage:
+            products = paginator.page(1)
+        return render(request, "products.html", {"products": products})
 
 
 def vendor_product_view(request):
-    products = Product.objects.all()
-    categorys = ProductsCategory.objects.all()
+    datas = Product.objects.all().order_by("product_id")
+    products = Paginator(datas, 5)
+    datas2 = ProductsCategory.objects.all().order_by("category_id")
+    categorys = Paginator(datas2, 5)
     return render(request, "product_show.html", {"products": products, "categorys": categorys})
 
 
@@ -29,8 +47,9 @@ def ajax_products(request):
     print(request.GET)
     product_id = request.GET.get("product_id", '')
     product_name = request.GET.get("name", '')
-    page_size = 2
+    page_size = 5
     page = int(request.GET["page"])
+    print(page)
     if product_name == "" and product_id == "":
         total = Product.objects.all().count()
         products = Product.objects.all().order_by("product_id")[(page - 1) * page_size: page * page_size]
@@ -59,7 +78,7 @@ def ajax_products(request):
         if product_id != "":
             total = Product.objects.filter(product_id=product_id).count()
             products = Product.objects.filter(product_id=product_id).order_by("product_id")[
-                   (page - 1) * page_size: page * page_size]
+                       (page - 1) * page_size: page * page_size]
         else:
             total = Product.objects.filter(name=product_name).count()
             products = Product.objects.filter(name=product_name).order_by("product_id")[
@@ -354,9 +373,13 @@ def add_categories(request):
         print(request.POST)
         category_name = request.POST.get("name", '')
         categories = ProductsCategory.objects.all()
-        for category in categories:
-            if category.name == category_name:
-                return render(request, "add_category.html", {"errors": "the category has been existed"})
-            else:
-                ProductsCategory.objects.create(name=category_name)
-                return redirect('category')
+        if len(categories) == 0:
+            ProductsCategory.objects.create(name=category_name)
+            return redirect('category')
+        else:
+            for category in categories:
+                if category.name == category_name:
+                    return render(request, "add_category.html", {"errors": "the category has been existed"})
+                else:
+                    ProductsCategory.objects.create(name=category_name)
+                    return redirect('category')

@@ -41,13 +41,12 @@
                 </div>
             {% endif %}
         {% else %}
-           <a href="{% url 'login2' product.0.product_id %}">Add to shopping cart</a>
+           <button><a href="{% url 'login2' product.0.product_id %}">Add to shopping cart</a></button>
         {% endif %}
     <script>
         $("#add_shopping_cart").click(function (){
             $.ajax({
                 url:"/shoppingCart/ajax_shopping_cart_data/",
-
                 type:"POST",
                 data:{
                     product_id: {{ product.0.product_id }},

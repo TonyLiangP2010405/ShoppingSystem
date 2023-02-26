@@ -120,6 +120,7 @@
             pagination: true,
             sortable: false,
             sortOrder: "asc",
+            visible: true,
             queryParams: function (params) {
                 var temp = {
                   page:(params.offset / params.limit) + 1,
@@ -130,15 +131,11 @@
             },
             sidePagination: "server",
             pageNumber: 1,
-            pageSize: 10,
-            pageList: [10, 25, 50, 100],
+            pageSize: 5,
             showColumns: true,
             showRefresh: true,
             uniqueID: "product_id",
-            columns: [{
-                checkbox: true,
-                visible: true,
-            }, {
+            columns: [ {
                 field: 'name',
                 title: 'Product name'
             }, {
@@ -190,7 +187,9 @@
             }
             ]
         });
+
     }
+
 function operation(value, row, index ) {
     var product_id = row.product_id
     var htm = `<button class='btn btn-primary btn-edit'><a class="btn"  href='/products/product_change/${product_id}'>Change</a></button>` +
@@ -222,8 +221,9 @@ function operation(value, row, index ) {
 }
 $('#btn_search').click(function () {
     $("#bootstrap-table").bootstrapTable('refresh', {
-        url: '/products/ajax_products/'
+        url: '/products/ajax_products/',
     })
 })
 </script>
+
 {% endblock %}
