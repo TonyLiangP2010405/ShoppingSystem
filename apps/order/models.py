@@ -35,6 +35,7 @@ class Order(models.Model):
 class ShoppingCart(models.Model):
     shopping_cart_id = models.IntegerField(primary_key=True)
     product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(MyUser, on_delete=models.DO_NOTHING)
     count_number = models.IntegerField()
 
     def __str__(self):

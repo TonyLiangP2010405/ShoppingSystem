@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -8,6 +9,7 @@ from apps.users.models import MyUser
 from django.contrib.auth.hashers import make_password
 from apps.basic.forms import ShippingAddressInfo
 from apps.order.models import ShoppingCart
+
 
 
 # Create your views here.
@@ -72,12 +74,6 @@ def user_login(request):
 
 
 def ajax_login_data(request):
-    if request.session.get('shopping_cart', False):
-        shopping_cart = request.session["shopping_cart"]
-        print(shopping_cart)
-        product = Product.objects.filter(product_id=shopping_cart["product_id"])
-        count_number = shopping_cart["count_number"]
-        ShoppingCart.objects.create(product=product, count_number=count_number)
     uname = request.POST.get("username", '')
     pwd = request.POST.get("password", '')
     json_dict = {}
@@ -116,7 +112,6 @@ def ajax_logout_data(request):
     logout(request)
     json_dict["code"] = 1000
     json_dict["msg"] = "logout successful, please waite 3 seconds"
-    ShoppingCart.objects.all().delete()
     return JsonResponse(json_dict)
 
 

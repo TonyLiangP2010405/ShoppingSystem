@@ -10,29 +10,22 @@ from apps.users.models import MyUser
 
 # Create your views here.
 def show_shopping_cart(request):
-    shopping_cart = ShoppingCart.objects.all()
+    shopping_cart = ShoppingCart.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0])
     return render(request, "ShoppingCart.html", {"shopping_cart": shopping_cart})
 
 
 def ajax_shopping_cart_data(request):
     if request.user.is_authenticated:
         product_id = request.POST.get("product_id", "")
-        shopping_cart = ShoppingCart.objects.filter(product_id=product_id)
+        shopping_cart = ShoppingCart.objects.filter(product_id=product_id, user=MyUser.objects.filter(username=request.user.username)[0])
         if shopping_cart:
             count_number = shopping_cart[0].count_number
             json_dict = {"code": 0, "warning": "The product has been exist"}
         else:
             product = Product.objects.filter(product_id=product_id)[0]
-            ShoppingCart.objects.create(product=product, count_number=1)
+            ShoppingCart.objects.create(product=product, count_number=1, user=MyUser.objects.filter(username=request.user.username)[0])
             count_number = 1
             json_dict = {"code": 0, "msg": "Add shoppingCart successful"}
-        if request.session.get('shopping_cart', False):
-            request.session["shopping_cart"] = {"product_id": product_id, "count_number": count_number}
-            print(request.session)
-            print('test1')
-        else:
-            request.session["shopping_cart"] = {"product_id": product_id, "count_number": count_number}
-            print('test2')
         return JsonResponse(json_dict)
     else:
         json_dict = {"code": 1, "msg": "You are not login, redirect to login page", 'url': '/user_login/'}
@@ -41,7 +34,7 @@ def ajax_shopping_cart_data(request):
 
 def shopping_cart_ajax_delete(request):
     shopping_cart_id = request.POST.get("shopping_cart_id", "")
-    ShoppingCart.objects.filter(shopping_cart_id=shopping_cart_id).delete()
+    ShoppingCart.objects.filter(shopping_cart_id=shopping_cart_id, user=MyUser.objects.filter(username=request.user.username)[0]).delete()
     json_dict = {"code": 1000, "msg": "delete successful"}
     return JsonResponse(json_dict)
 
@@ -55,7 +48,7 @@ def shopping_cart_ajax_minus(request):
     int_count_number = int(count_number)
     if int_count_number > 1:
         shopping_cart_id = request.POST.get("shopping_cart_id", '')
-        shopping_cart = ShoppingCart.objects.filter(shopping_cart_id=shopping_cart_id)[0]
+        shopping_cart = ShoppingCart.objects.filter(shopping_cart_id=shopping_cart_id, user=MyUser.objects.filter(username=request.user.username)[0])[0]
         shopping_cart.count_number = int_count_number - 1
         shopping_cart.save()
         data = {"msg": "success"}
@@ -68,7 +61,7 @@ def shopping_cart_ajax_plus(request):
     count_number = request.POST.get("count", '')
     int_count_number = int(count_number)
     shopping_cart_id = request.POST.get("shopping_cart_id", '')
-    shopping_cart = ShoppingCart.objects.filter(shopping_cart_id=shopping_cart_id)[0]
+    shopping_cart = ShoppingCart.objects.filter(shopping_cart_id=shopping_cart_id, user=MyUser.objects.filter(username=request.user.username)[0])[0]
     shopping_cart.count_number = int_count_number + 1
     shopping_cart.save()
     data = {"msg": "success"}
@@ -76,12 +69,6 @@ def shopping_cart_ajax_plus(request):
 
 
 def ajax_login_data(request):
-    if request.session.get('shopping_cart', False):
-        shopping_cart = request.session["shopping_cart"]
-        print(shopping_cart)
-        product = Product.objects.filter(product_id=shopping_cart["product_id"])
-        count_number = shopping_cart["count_number"]
-        ShoppingCart.objects.create(product=product, count_number=count_number)
     product_id = request.POST.get("product_id", '')
     uname = request.POST.get("username", '')
     pwd = request.POST.get("password", '')
@@ -154,7 +141,7 @@ def add_order_list(request):
         total_price = 0
         count_number = 0
         price = 0
-        shopping_carts = ShoppingCart.objects.all()
+        shopping_carts = ShoppingCart.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0])
         user = MyUser.objects.filter(username=request.user.username)[0]
         if len(Order.objects.filter(user=user)) == 0 or Order.objects.filter(user=user)[
             len(Order.objects.filter(user=user)) - 1].total_order_amount != 0:
