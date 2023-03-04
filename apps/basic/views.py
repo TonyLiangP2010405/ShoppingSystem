@@ -8,7 +8,7 @@ from apps.goods.models import Product
 
 # Create your views here.
 def home_page(request):
-    datas = Product.objects.all().order_by("product_id")
+    datas = Product.objects.all().order_by("price")
     p = Paginator(datas, 5)
     page_number = request.GET.get('page')
     try:
@@ -42,7 +42,7 @@ def ajax_search(request):
 def filter_product(request):
     name = request.GET.get("name", '')
     if name:
-        datas = Product.objects.filter(name=name).order_by("product_id")
+        datas = Product.objects.filter(name=name).order_by("price")
         p = Paginator(datas, 5)
         page_number = request.GET.get('page')
         try:
