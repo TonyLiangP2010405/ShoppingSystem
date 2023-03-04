@@ -1,0 +1,99 @@
+{% extends 'base2.html' %}
+{% block content %}
+    <div class="container text-center">
+        <header class=" text-center text-white mb-5">
+            <img src="/media/homeImage.jpg" class="w-100"  alt="Banner"/>
+            <div class="position-absolute top-50 start-50 translate-middle-x w-100 px-3">
+                <h1 class="display-4">Shopping System</h1>
+            </div>
+        </header>
+        <h2 class="display-6 py-5">Most Popular</h2>
+        <div class="d-flex justify-content-between align-items-center flex-column flex-lg-row my-5" id="new">
+            <div class="card m-2">
+                <a href="./product1.html">
+                    <img src="./img/books/img1.jpg" class="card-img-top" height="300" alt="Product">
+                </a>
+                <div class="card-body">
+                    <p class="card-text fw-bold">BOOK 1</p>
+                    <small class="text-secondary">USD XX$</small>
+                </div>
+            </div>
+        </div>
+        <section class="my-5 mx-auto py-5" style="max-width: 25em;">
+            <h2>Subscribe To Our Newsletter</h2>
+            <form class="d-flex my-4">
+                <input class="form-control me-2" type="search" placeholder="Your E-mail">
+                <button class="btn btn-outline-dark" type="submit">
+                Subscribe
+                </button>
+            </form>
+        </section>
+        <footer class="d-flex justify-content-between my-5 text-start flex-wrap">
+        <ul class="nav flex-column">
+            <li class="fw-bold nav-item">
+                <a href="#" class="nav-link text-dark">Product</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-muted">Books</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-muted">Books</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-muted">Books</a>
+            </li>
+        </ul>
+        <ul class="nav flex-column">
+            <li class="fw-bold nav-item text-dark">
+                <a href="#" class="nav-link text-dark">Help</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-muted">Shopping Guide</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-muted">Product Care</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-muted">Contact Us</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-muted">Return Process</a>
+            </li>
+        </ul>
+        <ul class="nav flex-column">
+            <li class="fw-bold nav-item">
+                <a href="#" class="nav-link text-dark">Content</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-muted">About</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-muted">Blog</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-muted">Career</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-muted">Pressroom</a>
+            </li>
+        </ul>
+        <ul class="nav flex-column">
+            <li class="fw-bold nav-item">
+                <a href="#" class="nav-link text-dark">Terms &amp; Conditions</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-muted">Legal Notice</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-muted">Terms Of Use</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-muted">Privacy Policy</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-muted">Cookies Policy</a>
+            </li>
+        </ul>
+        </footer>
+    </div>
+{% endblock %}

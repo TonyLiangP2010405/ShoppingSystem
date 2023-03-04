@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils import timezone
 
 from apps.goods.models import Product
@@ -10,8 +10,11 @@ from apps.users.models import MyUser
 
 # Create your views here.
 def show_shopping_cart(request):
-    shopping_cart = ShoppingCart.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0])
-    return render(request, "ShoppingCart.html", {"shopping_cart": shopping_cart})
+    if request.user.is_authenticated:
+        shopping_cart = ShoppingCart.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0])
+        return render(request, "ShoppingCart.html", {"shopping_cart": shopping_cart})
+    else:
+        return redirect('login')
 
 
 def ajax_shopping_cart_data(request):
@@ -98,12 +101,15 @@ def ajax_login_data(request):
 
 
 def show_purchase_order(request):
-    orders = Order.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0]).order_by(
-        "-purchase_date")
-    print(orders)
-    if len(orders) != 0:
-        return render(request, "purchase_order.html", {"orders": orders})
-    return render(request, "purchase_order.html")
+    if request.user.is_authenticated:
+        orders = Order.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0]).order_by(
+            "-purchase_date")
+        print(orders)
+        if len(orders) != 0:
+            return render(request, "purchase_order.html", {"orders": orders})
+        return render(request, "purchase_order.html")
+    else:
+        return render(request, "purchase_order.html")
 
 
 def add_purchase_order(request):

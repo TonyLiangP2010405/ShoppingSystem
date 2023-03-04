@@ -126,7 +126,7 @@ def change_password(request):
                 uname = request.user.username
                 original_password = request.POST.get("original_password", '')
                 new_password = request.POST.get("new_password", '')
-                users = MyUser.objects.all()
+                users = MyUser.objects.filter(username=uname)
                 for user in users:
                     if user.username == uname and user.check_password(original_password):
                         MyUser.objects.filter(username=uname).update(password=make_password(new_password))
