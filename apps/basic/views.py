@@ -3,11 +3,24 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from apps.basic.forms import ShippingAddressInfo
 from apps.basic.models import ShippingAddress
-from apps.goods.models import Product
+from apps.goods.models import Product, ProductsCategory
 
 
 # Create your views here.
 def home_page(request):
+    datas = Product.objects.all().order_by("product_id")
+    p = Paginator(datas, 5)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = p.get_page(page_number)
+    except PageNotAnInteger:
+        page_obj = p.page(1)
+    except EmptyPage:
+        page_obj = p.page(p.num_pages)
+    return render(request, "homePage2.html", {"products": page_obj})
+
+
+def home_page_filter(request):
     datas = Product.objects.all().order_by("price")
     p = Paginator(datas, 5)
     page_number = request.GET.get('page')
@@ -17,32 +30,25 @@ def home_page(request):
         page_obj = p.page(1)
     except EmptyPage:
         page_obj = p.page(p.num_pages)
-    return render(request, "homePage.html", {"products": page_obj})
-
-
-def home_page_filter(request):
-    datas = Product.objects.all().order_by("category_id")
-    p = Paginator(datas, 5)
-    page_number = request.GET.get('page')
-    try:
-        page_obj = p.get_page(page_number)
-    except PageNotAnInteger:
-        page_obj = p.page(1)
-    except EmptyPage:
-        page_obj = p.page(p.num_pages)
-    return render(request, "homePage.html", {"products": page_obj})
+    return render(request, "homePage2.html", {"products": page_obj})
 
 
 def ajax_search(request):
     product_name = request.POST.get("product_name", '')
-    url = "/filter_product_name/?name="+ product_name
+    url = "/filter_product_name/?name=" + product_name
     return JsonResponse({"url": url})
 
 
-def filter_product(request):
+def ajax_search2(request):
+    category_name = request.POST.get("category_name", '')
+    url = "/filter_category_name/?name=" + category_name
+    return JsonResponse({"url": url})
+
+
+def filter_category(request):
     name = request.GET.get("name", '')
     if name:
-        datas = Product.objects.filter(name=name).order_by("price")
+        datas = Product.objects.filter(category__name=name).order_by("name")
         p = Paginator(datas, 5)
         page_number = request.GET.get('page')
         try:
@@ -51,7 +57,7 @@ def filter_product(request):
             page_obj = p.page(1)
         except EmptyPage:
             page_obj = p.page(p.num_pages)
-        return render(request, "homePage.html", {"products": page_obj})
+        return render(request, "homePage2.html", {"products": page_obj})
     else:
         datas = Product.objects.all().order_by("product_id")
         p = Paginator(datas, 5)
@@ -62,7 +68,33 @@ def filter_product(request):
             page_obj = p.page(1)
         except EmptyPage:
             page_obj = p.page(p.num_pages)
-        return render(request, "homePage.html", {"products": page_obj})
+        return render(request, "homePage2.html", {"products": page_obj})
+
+
+def filter_product(request):
+    name = request.GET.get("name", '')
+    if name:
+        datas = Product.objects.filter(name=name).order_by("name")
+        p = Paginator(datas, 5)
+        page_number = request.GET.get('page')
+        try:
+            page_obj = p.get_page(page_number)
+        except PageNotAnInteger:
+            page_obj = p.page(1)
+        except EmptyPage:
+            page_obj = p.page(p.num_pages)
+        return render(request, "homePage2.html", {"products": page_obj})
+    else:
+        datas = Product.objects.all().order_by("product_id")
+        p = Paginator(datas, 5)
+        page_number = request.GET.get('page')
+        try:
+            page_obj = p.get_page(page_number)
+        except PageNotAnInteger:
+            page_obj = p.page(1)
+        except EmptyPage:
+            page_obj = p.page(p.num_pages)
+        return render(request, "homePage2.html", {"products": page_obj})
 
 
 def add_shipping_address(request):

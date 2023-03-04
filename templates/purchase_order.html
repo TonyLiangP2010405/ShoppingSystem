@@ -1,16 +1,18 @@
-{% extends 'base.html' %}
+{% extends 'base2.html' %}
 {% load static %}
 {% block content %}
     {% csrf_token %}
-    {% if request.user.is_superuser %}
-        <label for="order_id">Search Order ID:</label> <input id="order_id" type="text" value=""> <input id="search" type="button" value="search">
-        <input id="pending" type="button" value="pending orders">
-        <input id="hold" type="button" value="hold orders">
-    {% else %}
-        <input id="now" type="button" value="current orders">
-    {% endif %}
-    <input id="past" type="button" value="past orders">
-    <input id="all" type="button" value="All orders">
+    <div class="container mt-3">
+        {% if request.user.is_superuser %}
+            <form class="d-flex my-4"><label for="order_id">Search Order ID:</label> <input id="order_id" class="form-control me-2" type="text" value=""> <input id="search" class="btn btn-outline-dark" type="button" value="search"></form>
+            <input id="pending" type="button" class="btn btn-outline-dark" value="pending orders">
+            <input id="hold" type="button" class="btn btn-outline-dark" value="hold orders">
+        {% else %}
+            <input id="now" type="button" class="btn btn-outline-dark" value="current orders">
+        {% endif %}
+        <input id="past" type="button" class="btn btn-outline-dark" value="past orders">
+        <input id="all" type="button" class="btn btn-outline-dark" value="All orders">
+    </div>
     <table class="table table-striped" id="recover">
         <thead>
             <tr>

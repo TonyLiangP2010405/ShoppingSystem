@@ -1,15 +1,17 @@
-{% extends 'base.html' %}
+{% extends 'base2.html' %}
 {% load static %}
 {% block content %}
-    <form novalidate action="" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="mb-3 mt-3">
-            <label for="{{ form_obj.name.id_for_label }}" class="form-label">{{ form_obj.name.label }}</label>
-            <div class="col-sm-offset-10">
-                    {{ form_obj.name }}
-                <span class="help-block">{{ errors }}</span>
+    <div class="container mt-3">
+        <form novalidate action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.name.id_for_label }}" class="form-label">{{ form_obj.name.label }}</label>
+                <div class="form-control me-2">
+                        {{ form_obj.name }}
+                    <span class="help-block">{{ errors }}</span>
+                </div>
             </div>
-        </div>
-        <input type="submit" value="Add" class="btn btn-success" id="">
-    </form>
+            <input type="submit" value="Add" class="btn btn-outline-dark"  id="">
+        </form>
+    </div>
 {% endblock %}

@@ -1,99 +1,118 @@
 {% extends 'base2.html' %}
+{% load static %}
 {% block content %}
-    <div class="container text-center">
+    <div class="container position-relative text-center">
         <header class=" text-center text-white mb-5">
+
             <img src="/media/homeImage.jpg" class="w-100"  alt="Banner"/>
             <div class="position-absolute top-50 start-50 translate-middle-x w-100 px-3">
-                <h1 class="display-4">Shopping System</h1>
             </div>
         </header>
-        <h2 class="display-6 py-5">Most Popular</h2>
-        <div class="d-flex justify-content-between align-items-center flex-column flex-lg-row my-5" id="new">
+    <section class="my-5 mx-auto py-5" style="max-width: 25em;">
+		<h2>Search Product by inputting product name</h2>
+		<form class="d-flex my-4">
+            {% csrf_token %}
+			<input class="form-control me-2" id="product_name" type="text" placeholder="Input Product Name">
+			<button class="btn btn-outline-dark" id="search" type="button">
+			    Search
+			</button>
+		</form >
+        <h2>Search Product by inputting product category</h2>
+        <form class="d-flex my-4">
+            <input class="form-control me-2" id="category_name" type="text" placeholder="Input Product Category">
+			<button class="btn btn-outline-dark" id="search2" type="button">
+			    Search
+			</button>
+        </form>
+        <div>
+            <h2>Sort product by price</h2>
+            <button class="btn btn-outline-dark"><a href="{% url 'homePage_filter' %}" style="text-decoration:none">filter</a></button>
+        </div>
+    </section>
+        <h2 class="display-6 py-5">Product List</h2>
+    <div class="d-flex justify-content-between align-items-center flex-column flex-lg-row my-5" id="new">
+        {% for product in products %}
             <div class="card m-2">
-                <a href="./product1.html">
-                    <img src="./img/books/img1.jpg" class="card-img-top" height="300" alt="Product">
+                <a href="{% url 'product_detail' product.product_id %}">
+                    <img src="/media/{{ product.main_image }}"  class="card-img-top" height="300" alt="Product">
                 </a>
                 <div class="card-body">
-                    <p class="card-text fw-bold">BOOK 1</p>
-                    <small class="text-secondary">USD XX$</small>
+                    <p class="card-text fw-bold">{{ product.name }}</p>
+                    <div class="text-secondary"><a  href="{% url 'product_detail' product.product_id %}">ID: {{ product.product_id }}</a></div>
+                    <div class="text-secondary">Category: {{ product.category.name }}</div>
+                    <div class="text-secondary">Category ID: {{ product.category.category_id }}</div>
+                    <div class="text-secondary">Price: {{ product.price }}</div>
                 </div>
             </div>
-        </div>
-        <section class="my-5 mx-auto py-5" style="max-width: 25em;">
-            <h2>Subscribe To Our Newsletter</h2>
-            <form class="d-flex my-4">
-                <input class="form-control me-2" type="search" placeholder="Your E-mail">
-                <button class="btn btn-outline-dark" type="submit">
-                Subscribe
-                </button>
-            </form>
-        </section>
-        <footer class="d-flex justify-content-between my-5 text-start flex-wrap">
-        <ul class="nav flex-column">
-            <li class="fw-bold nav-item">
-                <a href="#" class="nav-link text-dark">Product</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link text-muted">Books</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link text-muted">Books</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link text-muted">Books</a>
-            </li>
-        </ul>
-        <ul class="nav flex-column">
-            <li class="fw-bold nav-item text-dark">
-                <a href="#" class="nav-link text-dark">Help</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link text-muted">Shopping Guide</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link text-muted">Product Care</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link text-muted">Contact Us</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link text-muted">Return Process</a>
-            </li>
-        </ul>
-        <ul class="nav flex-column">
-            <li class="fw-bold nav-item">
-                <a href="#" class="nav-link text-dark">Content</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link text-muted">About</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link text-muted">Blog</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link text-muted">Career</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link text-muted">Pressroom</a>
-            </li>
-        </ul>
-        <ul class="nav flex-column">
-            <li class="fw-bold nav-item">
-                <a href="#" class="nav-link text-dark">Terms &amp; Conditions</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link text-muted">Legal Notice</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link text-muted">Terms Of Use</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link text-muted">Privacy Policy</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link text-muted">Cookies Policy</a>
-            </li>
-        </ul>
-        </footer>
+        {% endfor %}
     </div>
+    <nav aria-label="Contacts Page Navigation">
+        <ul class="pagination justify-content-center m-2">
+            {% if products.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ products.previous_page_number }}">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% for pg in products.paginator.page_range %}
+                {% if products.number == pg %}
+                    <li class="page-item active">
+                        <a class="page-link" href="">{{ pg }}</a>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ pg }}">
+                            {{ pg }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            {% if products.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ products.next_page_number }}">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    </div>
+    <script>
+        $("#search").click(function () {
+            $.ajax({
+                url: '/ajax_search/',
+                method: 'POST',
+                data: {
+                   "csrfmiddlewaretoken": $("[name = 'csrfmiddlewaretoken']").val(),
+                    "product_name": $("#product_name").val(),
+                },
+                success(data){
+                    window.location = data["url"]
+                },
+                error(e){
+                    console.log(e)
+                }
+            })
+        })
+</script>
+    <script>
+        $("#search2").click(function () {
+            $.ajax({
+                url: '/ajax_search2/',
+                method: 'POST',
+                data: {
+                   "csrfmiddlewaretoken": $("[name = 'csrfmiddlewaretoken']").val(),
+                    "category_name": $("#category_name").val(),
+                },
+                success(data){
+                    window.location = data["url"]
+                },
+                error(e){
+                    console.log(e)
+                }
+            })
+        })
+</script>
 {% endblock %}

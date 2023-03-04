@@ -26,7 +26,7 @@ def user_product_view(request):
             products = paginator.page(1)
         except EmptyPage:
             products = paginator.page(1)
-        return render(request, "products.html", {"products": products})
+        return render(request, "homePage2.html", {"products": products})
 
 
 def vendor_product_view(request):
@@ -40,7 +40,7 @@ def vendor_product_view(request):
 def product_detail(request, product_id):
     product = Product.objects.filter(product_id=product_id)
     img_url = product[0].main_image
-    return render(request, "product_detail.html", {"product": product, "img_url": img_url})
+    return render(request, "product_detail2.html", {"product": product, "img_url": img_url})
 
 
 def ajax_products(request):

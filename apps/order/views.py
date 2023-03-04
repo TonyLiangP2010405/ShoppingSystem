@@ -31,7 +31,8 @@ def ajax_shopping_cart_data(request):
             json_dict = {"code": 0, "msg": "Add shoppingCart successful"}
         return JsonResponse(json_dict)
     else:
-        json_dict = {"code": 1, "msg": "You are not login, redirect to login page", 'url': '/user_login/'}
+        product_id = request.POST.get("product_id", "")
+        json_dict = {"code": 1, "msg": "You are not login, redirect to login page", 'url': '/shoppingCart/user_login/'+ product_id}
         return JsonResponse(json_dict)
 
 
@@ -43,7 +44,7 @@ def shopping_cart_ajax_delete(request):
 
 
 def user_shopping_cart_login(request, product_id):
-    return render(request, "user_shoppingCart_login.html", {"product_id": product_id})
+    return render(request, "user_shoppingCart_login2.html", {"product_id": product_id})
 
 
 def shopping_cart_ajax_minus(request):

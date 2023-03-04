@@ -17,7 +17,7 @@ def user_register(request):
     if request.method == "GET":
         form_obj = UserRegForm()
         form_obj2 = ShippingAddressInfo()
-        return render(request, 'user_register.html', {'form_obj': form_obj, 'form_obj2': form_obj2})
+        return render(request, 'user_register2.html', {'form_obj': form_obj, 'form_obj2': form_obj2})
     if request.method == "POST":
         form_obj = UserRegForm(request.POST, request.FILES)
         form_obj2 = ShippingAddressInfo(request.POST, request.FILES)
@@ -28,7 +28,7 @@ def user_register(request):
             password = request.POST.get("password", '')
             if users:
                 info = 'the user has been existed'
-                return render(request, 'user_register.html',
+                return render(request, 'user_register2.html',
                               {"form_obj": form_obj, 'form_obj2': form_obj2, "info": info})
             else:
                 form_obj.cleaned_data["username"] = uname
@@ -65,12 +65,12 @@ def user_register(request):
         else:
             errors = form_obj.errors
             print(errors)
-            return render(request, "user_register.html",
+            return render(request, "user_register2.html",
                           {'form_obj': form_obj, 'form_obj2': form_obj2, 'errors': errors})
 
 
 def user_login(request):
-    return render(request, "user_login.html")
+    return render(request, "user_login2.html")
 
 
 def ajax_login_data(request):
@@ -102,7 +102,7 @@ def ajax_login_data(request):
 
 def user_logout(request):
     if request.user.is_authenticated:
-        return render(request, "user_logout.html")
+        return render(request, "user_logout2.html")
     else:
         return redirect('login')
 
@@ -119,7 +119,7 @@ def change_password(request):
     if request.user.is_authenticated:
         if request.method == "GET":
             form_obj = UserChangePasswordForm()
-            return render(request, "change_password.html", {'form_obj': form_obj})
+            return render(request, "change_password2.html", {'form_obj': form_obj})
         if request.method == "POST":
             form_obj = UserChangePasswordForm(request.POST, request.FILES)
             if form_obj.is_valid():
@@ -131,10 +131,10 @@ def change_password(request):
                     if user.username == uname and user.check_password(original_password):
                         MyUser.objects.filter(username=uname).update(password=make_password(new_password))
                         info = 'You have changed password successful'
-                        return render(request, 'change_password_successful.html', {"info": info})
+                        return render(request, 'change_password_successful.html', {"info": info, 'check': ''})
                     else:
-                        info = 'the original password has some problem'
-                        return render(request, "change_password.html", {'info': info})
+                        info = 'the original password has some problem, after 3 seconds, the website will redirect the change password page'
+                        return render(request, "change_password2.html", {'info': info, 'check': "error"})
             else:
                 errors = form_obj.errors
                 print(errors)

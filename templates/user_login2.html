@@ -1,0 +1,54 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block content %}
+    <div class="wrapper">
+        <div class="logo">
+
+        </div>
+        {% if request.user.is_authenticated %}
+        <div class="col-8">
+            <label for="agreeTerms" style="text-align: center">You have been login, after 3 seconds the page will go to the homepage</label>
+        </div>
+        <script>setTimeout(function(){ window.location = "{% url 'homePage' %}"; },3000);</script>
+        {% else %}
+            <div class="text-center mt-4 name">
+                Login
+            </div>
+            <form class="p-3 mt-3" method="post">
+                {% csrf_token %}
+                <div class="form-field d-flex align-items-center">
+                    <span class="far fa-user"></span>
+                    <input type="text" id="username" name="username" placeholder="username"/>
+                </div>
+                <div class="form-field d-flex align-items-center">
+                    <span class="fas fa-key"></span>
+                    <input type="password" id="password" name="password" placeholder="password"/>
+                </div>
+                <input class="btn mt-3" id="login" value="Login">
+            </form>
+            <div class="text-center fs-6">
+                <a href="{% url 'register' %}">Sign up</a>
+            </div>
+        </div>
+            <script>
+                $("#login").click(function () {
+                    $.ajax({
+                        url:"/ajax_login_data/",
+                        type: "POST",
+                        data:{
+                            username: $("#username").val(),
+                            password: $("#password").val(),
+                            "csrfmiddlewaretoken": $("[name = 'csrfmiddlewaretoken']").val()
+                        },
+                        success: function (data) {
+                            location.reload();
+                            $("#info").html(data.msg)
+                        },
+                        error: function (jqXHR, textStatus, err) {
+                            console.log(arguments)
+                        }
+                    })
+                })
+                </script>
+    {% endif %}
+{% endblock %}

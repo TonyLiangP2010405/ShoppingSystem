@@ -8,4 +8,6 @@ urlpatterns = [
     path('filter/', views.home_page_filter, name='homePage_filter'),
     path('ajax_search/', views.ajax_search),
     path('filter_product_name/', views.filter_product, name='filter_product_name'),
+    path('ajax_search2/', views.ajax_search2),
+    path('filter_category_name/', views.filter_category, name='filter_category_name')
 ]

@@ -1,0 +1,112 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block content %}
+    <div class="wrapper">
+        <form novalidate action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.username.id_for_label }}" class="form-label">{{ form_obj.username.label }}</label>
+                <div class="form-field d-flex align-items-center">
+                    {{ form_obj.username }}
+                    <span class="help-block">{{ form_obj.errors.username.0 }}</span>
+                </div>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.password.id_for_label }}" class="form-label">
+                    {{ form_obj.password.label }}
+                </label>
+                <div class="form-field d-flex align-items-center">
+                    {{ form_obj.password }}
+                    <span class="help-block">{{ form_obj.errors.password.0 }}</span>
+                </div>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.password.id_for_label }}" class="form-label">
+                    {{ form_obj.re_password.label }}
+                </label>
+                <div class="form-field d-flex align-items-center">
+                    {{ form_obj.re_password }}
+                </div>
+                <span class="help-block">{{ form_obj.errors.re_password.0 }}</span>
+            </div>
+            <div class="mb-3 mt-3">
+                <label class="form-label">Email</label>
+                <div class="form-field d-flex align-items-center">
+                    {{ form_obj.email }}
+                    <span class="help-block">{{ form_obj.errors.email.0 }}</span>
+                </div>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="{{ form_obj.mobile.id_for_label }}">{{ form_obj.mobile.label }}</label>
+                <div class="form-field d-flex align-items-center">
+                    {{ form_obj.mobile }}
+                    <span class="help-block">{{ form_obj.errors.mobile.0 }}</span>
+                </div>
+            </div>
+            <div class="mb-3 mt-3">
+            <label for="{{ form_obj2.receiver_name.id_for_label }}" class="form-label">{{ form_obj2.receiver_name.label }}</label>
+            <div class="form-field d-flex align-items-center">
+                {{ form_obj2.receiver_name }}
+                <span class="help-block">{{ form_obj2.errors.receiver_name.0 }}</span>
+            </div>
+        </div>
+        <div class="mb-3 mt-3">
+            <label for="{{ form_obj2.receiver_phone.id_for_label }}" class="form-label">{{ form_obj2.receiver_phone.label }}</label>
+            <div class="form-field d-flex align-items-center">
+                {{ form_obj2.receiver_phone }}
+                <span class="help-block">{{ form_obj2.errors.receiver_phone.0 }}</span>
+            </div>
+        </div>
+        <div class="mb-3 mt-3">
+            <label for="{{ form_obj2.receiver_mobile.id_for_label }}" class="form-label">{{ form_obj2.receiver_mobile.label }}</label>
+            <div class="form-field d-flex align-items-center">
+                {{ form_obj2.receiver_mobile }}
+                <span class="help-block">{{ form_obj2.errors.receiver_mobile.0 }}</span>
+            </div>
+        </div>
+        <div class="mb-3 mt-3">
+            <label for="{{ form_obj2.receiver_province.id_for_label }}" class="form-label">{{ form_obj2.receiver_province.label }}</label>
+            <div class="form-field d-flex align-items-center">
+                {{ form_obj2.receiver_province }}
+                <span class="help-block">{{ form_obj2.errors.receiver_province.0 }}</span>
+            </div>
+        </div>
+        <div class="mb-3 mt-3">
+            <label for="{{ form_obj2.receiver_city.id_for_label }}" class="form-label">{{ form_obj2.receiver_city.label }}</label>
+            <div class="form-field d-flex align-items-center">
+                {{ form_obj2.receiver_city }}
+                <span class="help-block">{{ form_obj2.errors.receiver_city.0 }}</span>
+            </div>
+        </div>
+        <div class="mb-3 mt-3">
+            <label for="{{ form_obj2.receiver_district.id_for_label }}" class="form-label">{{ form_obj2.receiver_district.label }}</label>
+            <div class="form-field d-flex align-items-center">
+                {{ form_obj2.receiver_district }}
+                <span class="help-block">{{ form_obj2.errors.receiver_district.0 }}</span>
+            </div>
+        </div>
+        <div class="mb-3 mt-3">
+            <label for="{{ form_obj2.receiver_address.id_for_label }}" class="form-label">{{ form_obj2.receiver_address.label }}</label>
+            <div class="form-field d-flex align-items-center">
+                {{ form_obj2.receiver_address }}
+                <span class="help-block">{{ form_obj2.errors.receiver_address.0 }}</span>
+            </div>
+        </div>
+        <div class="mb-3 mt-3">
+            <label for="{{ form_obj2.receiver_zip.id_for_label }}" class="form-label">{{ form_obj2.receiver_zip.label }}</label>
+            <div class="form-field d-flex align-items-center">
+                {{ form_obj2.receiver_zip }}
+                <span class="help-block">{{ form_obj2.errors.receiver_zip.0 }}</span>
+            </div>
+        </div>
+            <div class="col-8">
+                <label for="agreeTerms">
+                    {{ info }}
+                </label>
+            </div>
+            <div class="col-sm-10">
+              <input type="submit" class="btn btn-success" value="register">
+            </div>
+        </form>
+    </div>
+{% endblock %}
