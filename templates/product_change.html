@@ -6,7 +6,7 @@
         {% if  product.name|length is 0 %}
             <div class="mb-3 mt-3">
                 <label for="{{ form_obj.name.id_for_label }}" class="form-label">{{ form_obj.name.label }}</label>
-                <div class="col-sm-offset-10">
+                <div class="form-control me-2">
                     {{ form_obj.name }}
                     <span class="help-block">{{ form_obj.errors.name.0 }}</span>
                 </div>
@@ -15,26 +15,26 @@
             <div class="mb-3 mt-3">
                 <div id="name_container" class="col-sm-offset-10">
                     {{ product.name }}
-                    <input value="change name" type="button" id="change_name">
+                    <input value="change name" class="btn btn-outline-dark" type="button" id="change_name">
                 </div>
             </div>
         {% endif %}
             <div class="mb-3 mt-3">
                 <div id="category_container" class="col-sm-offset-10">
                     {{ product.category }}
-                    <input value="change category" type="button" id="change_category">
+                    <input value="change category" class="btn btn-outline-dark" type="button" id="change_category">
                 </div>
             </div>
             <div class="mb-3 mt-3">
                 <div id="price_container" class="col-sm-offset-10">
                     {{ product.price }}
-                    <input value="change price" type="button" id="change_price">
+                    <input value="change price" class="btn btn-outline-dark" type="button" id="change_price">
                 </div>
             </div>
         {% if product.property1|length is 0 %}
             <div class="mb-3 mt-3">
                 <label for="{{ form_obj.property1.id_for_label }}" class="form-label">{{ form_obj.property1.label }}</label>
-                <div class="col-sm-offset-10">
+                <div class="form-control me-2">
                     {{ form_obj.property1 }}
                     <span class="help-block">{{ form_obj.errors.property1.0 }}</span>
                 </div>
@@ -43,14 +43,14 @@
             <div class="mb-3 mt-3">
                 <div id="property1_container" class="col-sm-offset-10">
                     {{ product.property1 }}
-                    <input value="change property1" type="button" id="change_property1">
+                    <input value="change property1" class="btn btn-outline-dark" type="button" id="change_property1">
                 </div>
             </div>
         {% endif %}
         {% if product.property2|length is 0 %}
             <div class="mb-3 mt-3">
                 <label for="{{ form_obj.property2.id_for_label }}" class="form-label">{{ form_obj.property2.label }}</label>
-                <div class="col-sm-offset-10">
+                <div class="form-control me-2">
                     {{ form_obj.property2 }}
                     <span class="help-block">{{ form_obj.errors.property2.0 }}</span>
                 </div>
@@ -59,14 +59,14 @@
             <div class="mb-3 mt-3">
                 <div id="property2_container" class="col-sm-offset-10">
                     {{ product.property2 }}
-                    <input value="change property2" type="button" id="change_property2">
+                    <input value="change property2" class="btn btn-outline-dark" type="button" id="change_property2">
                 </div>
             </div>
         {% endif %}
         {% if product.property3|length is 0 %}
             <div class="mb-3 mt-3">
                 <label for="{{ form_obj.property3.id_for_label }}" class="form-label">{{ form_obj.property3.label }}</label>
-                <div class="col-sm-offset-10">
+                <div class="form-control me-2">
                     {{ form_obj.property3 }}
                     <span class="help-block">{{ form_obj.errors.property3.0 }}</span>
                 </div>
@@ -75,14 +75,14 @@
             <div class="mb-3 mt-3">
                 <div id="property3_container" class="col-sm-offset-10">
                     {{ product.property3 }}
-                    <input value="change property3" type="button" id="change_property3">
+                    <input value="change property3" class="btn btn-outline-dark" type="button" id="change_property3">
                 </div>
             </div>
         {% endif %}
         {% if product.property4|length is 0 %}
             <div class="mb-3 mt-3">
                 <label for="{{ form_obj.property4.id_for_label }}" class="form-label">{{ form_obj.property4.label }}</label>
-                <div class="col-sm-offset-10">
+                <div class="form-control me-2">
                     {{ form_obj.property4 }}
                     <span class="help-block">{{ form_obj.errors.property4.0 }}</span>
                 </div>
@@ -91,14 +91,14 @@
             <div class="mb-3 mt-3">
                 <div id="property4_container" class="col-sm-offset-10">
                     {{ product.property4 }}
-                    <input value="change property4" type="button" id="change_property4">
+                    <input value="change property4" class="btn btn-outline-dark" type="button" id="change_property4">
                 </div>
             </div>
         {% endif %}
         {% if product.property5|length is 0 %}
             <div class="mb-3 mt-3">
                 <label for="{{ form_obj.property5.id_for_label }}" class="form-label">{{ form_obj.property5.label }}</label>
-                <div class="col-sm-offset-10">
+                <div class="form-control me-2">
                     {{ form_obj.property5 }}
                     <span class="help-block">{{ form_obj.errors.property5.0 }}</span>
                 </div>
@@ -107,14 +107,14 @@
             <div class="mb-3 mt-3">
                 <div id="property5_container" class="col-sm-offset-10">
                     {{ product.property5 }}
-                    <input value="change property5" type="button" id="change_property5">
+                    <input value="change property5" class="btn btn-outline-dark" type="button" id="change_property5">
                 </div>
             </div>
         {% endif %}
         {% if product.property6|length is 0 %}
             <div class="mb-3 mt-3">
                 <label for="{{ form_obj.property6.id_for_label }}" class="form-label">{{ form_obj.property6.label }}</label>
-                <div class="col-sm-offset-10">
+                <div class="form-control me-2">
                     {{ form_obj.property6 }}
                     <span class="help-block">{{ form_obj.errors.property6.0 }}</span>
                 </div>
@@ -123,21 +123,21 @@
             <div class="mb-3 mt-3">
                 <div id="property6_container" class="col-sm-offset-10">
                     {{ product.property6 }}
-                    <input value="change property6" type="button" id="change_property6">
+                    <input value="change property6" class="btn btn-outline-dark" type="button" id="change_property6">
                 </div>
             </div>
         {% endif %}
             <div class="mb-3 mt-3">
                 <div id="customer_rating_container" class="col-sm-offset-10">
                     {{ product.customer_rating }}
-                    <input value="change customer rating" type="button" id="change_customer_rating">
+                    <input value="change customer rating" class="btn btn-outline-dark" type="button" id="change_customer_rating">
                 </div>
             </div>
 
         {% if product.review|length is 0 %}
             <div class="mb-3 mt-3">
                 <label for="{{ form_obj.review.id_for_label }}" class="form-label">{{ form_obj.review.label }}</label>
-                <div class="col-sm-offset-10">
+                <div class="form-control me-2">
                     {{ form_obj.review }}
                     <span class="help-block">{{ form_obj.errors.review.0 }}</span>
                 </div>
@@ -146,20 +146,20 @@
             <div class="mb-3 mt-3">
                 <div id="review_container" class="col-sm-offset-10">
                     {{ product.review }}
-                    <input value="change review" type="button" id="change_review">
+                    <input value="change review" class="btn btn-outline-dark" type="button" id="change_review">
                 </div>
             </div>
         {% endif %}
         <div class="mb-3 mt-3">
             <div id="temporary_status_container" class="col-sm-offset-10">
                 {{ product.temporary_status }}
-                <input value="change temporary status" type="button" id="change_temporary_status">
+                <input value="change temporary status" class="btn btn-outline-dark" type="button" id="change_temporary_status">
             </div>
         </div>
         {% if product.main_image|length is 0 %}
             <div class="mb-3 mt-3">
                 <label for="{{ form_obj.main_image.id_for_label }}" class="form-label">{{ form_obj.main_image.label }}</label>
-                <div class="col-sm-offset-10">
+                <div class="form-control me-2">
                     {{ form_obj.main_image }}
                     <span class="help-block">{{ form_obj.errors.main_image.0 }}</span>
                 </div>
@@ -168,7 +168,7 @@
             <div class="mb-3 mt-3">
                 <div id="main_image_container" class="col-sm-offset-10">
                     <img src="/media/{{ product.main_image }}/" alt="main_image">
-                    <input value="change main image" type="button" id="change_main_image">
+                    <input value="change main image" class="btn btn-outline-dark" type="button" id="change_main_image">
                 </div>
             </div>
         {% endif %}
@@ -184,7 +184,7 @@
             <div class="mb-3 mt-3">
                 <div id="photo1_container" class="col-sm-offset-10">
                     <img src="/media/{{ product.photo1 }}/" alt="photo1">
-                    <input value="change photo1" type="button" id="change_photo1">
+                    <input value="change photo1" class="btn btn-outline-dark" type="button" id="change_photo1">
                 </div>
             </div>
         {% endif %}
@@ -200,7 +200,7 @@
             <div class="mb-3 mt-3">
                 <div id="photo2_container" class="col-sm-offset-10">
                     {{ product.photo2 }}
-                    <input value="change photo2" type="button" id="change_photo2">
+                    <input value="change photo2" class="btn btn-outline-dark" type="button" id="change_photo2">
                 </div>
             </div>
         {% endif %}
@@ -216,7 +216,7 @@
             <div class="mb-3 mt-3">
                 <div id="photo3_container" class="col-sm-offset-10">
                     <img src="/media/{{ product.photo3 }}/" alt="photo3">
-                    <input value="change photo3" type="button" id="change_photo3">
+                    <input value="change photo3" class="btn btn-outline-dark" type="button" id="change_photo3">
                 </div>
             </div>
         {% endif %}
@@ -232,12 +232,12 @@
             <div class="mb-3 mt-3">
                 <div id="photo4_container" class="col-sm-offset-10">
                     <img src="/media/{{ product.photo4 }}/" alt="photo4">
-                    <input value="change photo4" type="button" id="change_photo4">
+                    <input value="change photo4" class="btn btn-outline-dark" type="button" id="change_photo4">
                 </div>
             </div>
         {% endif %}
         <div class="mb-3 mt-3">
-            <input type="submit" value="Add" class="btn btn-success">
+            <input type="submit"  value="Change" class="btn btn-outline-dark">
         </div>
     </form>
 </div>

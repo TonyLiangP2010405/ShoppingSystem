@@ -29,6 +29,6 @@
     </table>
     {% if order_lists|length is 0 %}
     {% else %}
-        <button><a href="{% url 'add_order' %}">Buy and Go to order</a></button>
+        <button class="btn btn-outline-dark"><a style="text-decoration:none" href="{% url 'add_order' %}">Buy and Go to order</a></button>
     {% endif %}
 {% endblock %}

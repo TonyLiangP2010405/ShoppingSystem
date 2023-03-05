@@ -156,7 +156,7 @@ def add_order_list(request):
             orders = Order.objects.all()
             order = orders[len(orders) - 1]
         else:
-            order = Order.objects.filter(user=user)[len(Order.objects.all()) - 1]
+            order = Order.objects.filter(user=user)[len(Order.objects.filter(user=user)) - 1]
         for shopping_cart in shopping_carts:
             order_list_product = shopping_cart.product
             order_list_product_count = shopping_cart.count_number

@@ -63,9 +63,12 @@
               {% endif %}
             <h4 class="my-4">USD <span id="price">{{ product.0.price }}</span>$</h4>
             <div class="d-grid my-4">
-              <button id="add_shopping_cart" class="btn btn-lg btn-dark" type="button">
-                Add To Cart
-              </button>
+                {% if request.user.is_superuser %}
+                    {% else %}
+                  <button id="add_shopping_cart" class="btn btn-lg btn-dark" type="button">
+                    Add To Cart
+                  </button>
+                {% endif %}
             </div>
             <div class="accordion">
               <div class="accordion-item">

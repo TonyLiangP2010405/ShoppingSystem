@@ -98,6 +98,6 @@
 
     {% if shopping_cart|length is 0 %}
     {% else %}
-        <button><a href="{% url 'add_order_list' %}">Add to orderList</a></button>
+        <button class="btn btn-outline-dark"><a style="text-decoration:none" href="{% url 'add_order_list' %}">Add to orderList</a></button>
     {% endif %}
 {% endblock %}
