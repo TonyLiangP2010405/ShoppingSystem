@@ -20,25 +20,29 @@ def show_shopping_cart(request):
 def ajax_shopping_cart_data(request):
     if request.user.is_authenticated:
         product_id = request.POST.get("product_id", "")
-        shopping_cart = ShoppingCart.objects.filter(product_id=product_id, user=MyUser.objects.filter(username=request.user.username)[0])
+        shopping_cart = ShoppingCart.objects.filter(product_id=product_id,
+                                                    user=MyUser.objects.filter(username=request.user.username)[0])
         if shopping_cart:
             count_number = shopping_cart[0].count_number
             json_dict = {"code": 0, "warning": "The product has been exist"}
         else:
             product = Product.objects.filter(product_id=product_id)[0]
-            ShoppingCart.objects.create(product=product, count_number=1, user=MyUser.objects.filter(username=request.user.username)[0])
+            ShoppingCart.objects.create(product=product, count_number=1,
+                                        user=MyUser.objects.filter(username=request.user.username)[0])
             count_number = 1
             json_dict = {"code": 0, "msg": "Add shoppingCart successful"}
         return JsonResponse(json_dict)
     else:
         product_id = request.POST.get("product_id", "")
-        json_dict = {"code": 1, "msg": "You are not login, redirect to login page", 'url': '/shoppingCart/user_login/'+ product_id}
+        json_dict = {"code": 1, "msg": "You are not login, redirect to login page",
+                     'url': '/shoppingCart/user_login/' + product_id}
         return JsonResponse(json_dict)
 
 
 def shopping_cart_ajax_delete(request):
     shopping_cart_id = request.POST.get("shopping_cart_id", "")
-    ShoppingCart.objects.filter(shopping_cart_id=shopping_cart_id, user=MyUser.objects.filter(username=request.user.username)[0]).delete()
+    ShoppingCart.objects.filter(shopping_cart_id=shopping_cart_id,
+                                user=MyUser.objects.filter(username=request.user.username)[0]).delete()
     json_dict = {"code": 1000, "msg": "delete successful"}
     return JsonResponse(json_dict)
 
@@ -52,7 +56,8 @@ def shopping_cart_ajax_minus(request):
     int_count_number = int(count_number)
     if int_count_number > 1:
         shopping_cart_id = request.POST.get("shopping_cart_id", '')
-        shopping_cart = ShoppingCart.objects.filter(shopping_cart_id=shopping_cart_id, user=MyUser.objects.filter(username=request.user.username)[0])[0]
+        shopping_cart = ShoppingCart.objects.filter(shopping_cart_id=shopping_cart_id,
+                                                    user=MyUser.objects.filter(username=request.user.username)[0])[0]
         shopping_cart.count_number = int_count_number - 1
         shopping_cart.save()
         data = {"msg": "success"}
@@ -65,7 +70,8 @@ def shopping_cart_ajax_plus(request):
     count_number = request.POST.get("count", '')
     int_count_number = int(count_number)
     shopping_cart_id = request.POST.get("shopping_cart_id", '')
-    shopping_cart = ShoppingCart.objects.filter(shopping_cart_id=shopping_cart_id, user=MyUser.objects.filter(username=request.user.username)[0])[0]
+    shopping_cart = ShoppingCart.objects.filter(shopping_cart_id=shopping_cart_id,
+                                                user=MyUser.objects.filter(username=request.user.username)[0])[0]
     shopping_cart.count_number = int_count_number + 1
     shopping_cart.save()
     data = {"msg": "success"}
@@ -274,3 +280,25 @@ def ajax_unhold(request):
     order.shipped_date = timezone.now()
     order.save()
     return JsonResponse({"msg": "success"})
+
+
+def filter_order_pending(request):
+    orders = Order.objects.filter(purchase_order_status='pending').order_by("-purchase_date")
+    return render(request, 'order_filter_pending.html', {'orders': orders})
+
+
+def filter_order_hold(request):
+    orders = Order.objects.filter(purchase_order_status='hold').order_by("-purchase_date")
+    return render(request, 'order_filter_hold.html', {'orders': orders})
+
+
+def filter_order_current(request):
+    orders = Order.objects.filter(purchase_order_status='pending') | Order.objects.filter(
+        purchase_order_status='hold').order_by("-purchase_date")
+    return render(request, 'order_filter_current.html', {"orders": orders})
+
+
+def filter_order_past(request):
+    orders = Order.objects.filter(purchase_order_status='cancelled') | Order.objects.filter(
+        purchase_order_status='shipped').order_by("-purchase_date")
+    return render(request, 'order_filter_past.html', {"orders": orders})

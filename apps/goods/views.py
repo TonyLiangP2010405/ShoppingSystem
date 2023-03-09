@@ -158,7 +158,8 @@ def product_add(request):
                 form_obj.cleaned_data["photo4"] = photo4
                 product = Product.objects.create(**form_obj.cleaned_data)
                 info = "create product successful"
-                return redirect('products')
+                product_redirect = Product.objects.filter(name=name)[0]
+                return redirect('/products/customer/' + str(product_redirect.product_id))
         else:
             errors = form_obj.errors
             print(errors)

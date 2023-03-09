@@ -7,37 +7,38 @@
      <div class="container position-relative">
         <div class="row py-5 g-5">
           <div class="col-12 col-lg-6">
-            <img src="/media/{{ img_url }}" class="m-1 w-100 sliderMainImage" data-bs-toggle="modal" data-bs-target="#imageModal"/>
+            <img style="cursor: pointer;" src="/media/{{ img_url }}" class="m-1 w-100 sliderMainImage" data-bs-toggle="modal" data-bs-target="#imageModal"/>
             <div>
+                <img style="cursor: pointer;" src="/media/{{ img_url }}" width="60" class="m-1 sliderThumb" alt="main_image">
                 {% if product.0.photo1|length is 0 %}
 
                 {% else %}
-                    <img src="/media/{{ product.0.photo1 }}" width="60" class="m-1 sliderThumb" alt="photo1"/>
+                    <img style="cursor: pointer;" src="/media/{{ product.0.photo1 }}" width="60" class="m-1 sliderThumb" alt="photo1"/>
                 {% endif %}
                 {% if product.0.photo2|length is 0 %}
 
                 {% else %}
-                    <img src="/media/{{ product.0.photo2 }}" width="60" class="m-1 sliderThumb" alt="photo2"/>
+                    <img style="cursor: pointer;" src="/media/{{ product.0.photo2 }}" width="60" class="m-1 sliderThumb" alt="photo2"/>
                 {% endif %}
                 {% if product.0.photo3|length is 0 %}
 
                 {% else %}
-                    <img src="/media/{{ product.0.photo3 }}" width="60" class="m-1 sliderThumb" alt="photo3"/>
+                    <img style="cursor: pointer;" src="/media/{{ product.0.photo3 }}" width="60" class="m-1 sliderThumb" alt="photo3"/>
                 {% endif %}
                 {% if product.0.photo4|length is 0 %}
 
                 {% else %}
-                    <img src="/media/{{ product.0.photo4 }}" width="60" class="m-1 sliderThumb" alt="photo4"/>
+                    <img style="cursor: pointer;" src="/media/{{ product.0.photo4 }}" width="60" class="m-1 sliderThumb" alt="photo4"/>
                 {% endif %}
                 {% if product.0.photo5|length is 0 %}
 
                 {% else %}
-                    <img src="/media/{{ product.0.photo5 }}" width="60" class="m-1 sliderThumb" alt="photo5"/>
+                    <img style="cursor: pointer;" src="/media/{{ product.0.photo5 }}" width="60" class="m-1 sliderThumb" alt="photo5"/>
                 {% endif %}
                 {% if product.0.photo6|length is 0 %}
 
                 {% else %}
-                    <img src="/media/{{ product.0.photo6 }}" width="60" class="m-1 sliderThumb" alt="photo6"/>
+                    <img style="cursor: pointer;" src="/media/{{ product.0.photo6 }}" width="60" class="m-1 sliderThumb" alt="photo6"/>
                 {% endif %}
             </div>
           </div>
@@ -106,6 +107,14 @@
         </div>
       </div>
      </div>
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <img src="/media/{{ img_url }}" class="w-100 rounded modalImage"/>
+          </div>
+        </div>
+    </div>
+
      <script>
         $("#add_shopping_cart").click(function (){
             $.ajax({
@@ -131,6 +140,25 @@
                     console.log(arguments)
                 }
             })
+        })
+    </script>
+    <script>
+        const mainImg = document.querySelector('.sliderMainImage');
+        const thumb = document.querySelectorAll('.sliderThumb');
+        const modalImg = document.querySelector('.modalImage');
+
+        for(let i = 0; i < thumb.length; i++) {
+            thumb[i].addEventListener('click', () => {
+            mainImg.src = thumb[i].src;
+            mainImg.classList.add('sliderFade');
+            setTimeout(() => {
+              mainImg.classList.remove('sliderFade');
+                }, 600);
+            });
+        }
+
+        mainImg.addEventListener('click', e => {
+        modalImg.src = e.target.src;
         })
     </script>
 {% endblock %}

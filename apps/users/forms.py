@@ -57,6 +57,9 @@ class UserRegForm(forms.Form):
         if not any(char.isupper() for char in password):
             self.add_error("password", ValidationError(
                 'This password must contain at least 1 uppercase character'))
+        if not any(char.isdigit() for char in password):
+            self.add_error("password", ValidationError(
+                'This password must contain at least 1 digit'))
         if password != re_password:
             # raise forms.ValidationError("The two passwords are different")
             self.add_error("re_password", ValidationError("The two passwords are different"))
@@ -101,6 +104,9 @@ class UserChangePasswordForm(forms.Form):
         re_password = self.cleaned_data.get("re_password")
         if not any(char.isupper() for char in password):
             self.add_error("re_password", ValidationError('This password must contain at least 1 uppercase character'))
+        if not any(char.isdigit() for char in password):
+            self.add_error("re_password",
+                           ValidationError('This password must contain at least 1 digit'))
         if password != re_password:
             # raise forms.ValidationError("The two passwords are different")
             self.add_error("re_password", ValidationError("The two passwords are different"))
