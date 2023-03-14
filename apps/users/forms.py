@@ -18,7 +18,7 @@ class UserRegForm(forms.Form):
                                    attrs={'class': 'form-control', 'placeholder': 'please input username'}),
                                error_messages={'required': 'username cannot be empty',
                                                'min_length': 'the length of username at least is 6 digit'})
-    password = forms.CharField(label="password", min_length=6, max_length=10,
+    password = forms.CharField(label="password", max_length=10,
                                widget=forms.widgets.PasswordInput(
                                    render_value=True,
                                    attrs={"class": "form-control"},
@@ -26,7 +26,7 @@ class UserRegForm(forms.Form):
                                error_messages={'max_length': 'the max length of password is 10 digit',
                                                'required': 'password cannot be empty',
                                                'min_length': 'the length of password at least is 6 digit'})
-    re_password = forms.CharField(label="re_password", min_length=6, max_length=10,
+    re_password = forms.CharField(label="re_password", max_length=10,
                                   widget=forms.widgets.PasswordInput(
                                       attrs={"class": "form-control"}, render_value=True),
                                   error_messages={
@@ -53,6 +53,10 @@ class UserRegForm(forms.Form):
     def clean(self):
         password = self.cleaned_data.get("password")
         re_password = self.cleaned_data.get("re_password")
+        if len(password) < 6:
+            self.add_error("re_password", ValidationError("The password should at least 6 digital "))
+        if len(re_password) < 6:
+            self.add_error("re_password", ValidationError("The re_password should at least 6 digital "))
         print(password)
         if not any(char.isupper() for char in password):
             self.add_error("password", ValidationError(
@@ -73,7 +77,7 @@ class UserRegForm(forms.Form):
 
 
 class UserChangePasswordForm(forms.Form):
-    original_password = forms.CharField(label="original_password", min_length=6, max_length=10,
+    original_password = forms.CharField(label="original_password",  max_length=10,
                                         widget=forms.widgets.PasswordInput(
                                             render_value=True,
                                             attrs={"class": "form-control"},
@@ -82,7 +86,7 @@ class UserChangePasswordForm(forms.Form):
                                                         'required': 'original password cannot be empty',
                                                         'min_length': 'the length of original password at least is 6 digit'})
 
-    new_password = forms.CharField(label="new_password", min_length=6, max_length=10,
+    new_password = forms.CharField(label="new_password",  max_length=10,
                                    widget=forms.widgets.PasswordInput(
                                        render_value=True,
                                        attrs={"class": "form-control"},
@@ -91,7 +95,7 @@ class UserChangePasswordForm(forms.Form):
                                                    'required': 'new password cannot be empty',
                                                    'min_length': 'the length of new password at least is 6 digit'})
 
-    re_password = forms.CharField(label="re_password", min_length=6, max_length=10,
+    re_password = forms.CharField(label="re_password", max_length=10,
                                   widget=forms.widgets.PasswordInput(
                                       attrs={"class": "form-control"}, render_value=True),
                                   error_messages={
@@ -100,16 +104,22 @@ class UserChangePasswordForm(forms.Form):
                                       'min_length': 'the length of password at least is 6 digit'})
 
     def clean(self):
+        original_password = self.cleaned_data.get("original_password")
         password = self.cleaned_data.get("new_password")
         re_password = self.cleaned_data.get("re_password")
+        if len(password) < 6:
+            self.add_error("re_password", ValidationError("The password should at least 6 digital "))
+        if len(re_password) < 6:
+            self.add_error("re_password", ValidationError("The re_password should at least 6 digital "))
+        if password != re_password:
+            # raise forms.ValidationError("The two passwords are different")
+            self.add_error("re_password", ValidationError("The two passwords are different"))
         if not any(char.isupper() for char in password):
             self.add_error("re_password", ValidationError('This password must contain at least 1 uppercase character'))
         if not any(char.isdigit() for char in password):
             self.add_error("re_password",
                            ValidationError('This password must contain at least 1 digit'))
-        if password != re_password:
-            # raise forms.ValidationError("The two passwords are different")
-            self.add_error("re_password", ValidationError("The two passwords are different"))
+
 
 
 

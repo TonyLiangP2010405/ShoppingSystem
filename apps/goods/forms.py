@@ -31,7 +31,7 @@ class ProductInfo(forms.ModelForm):
     class Meta:
         model = Product
         fields = ['name', 'category', 'price', 'property1', 'property2', 'property3', 'property4', 'property5',
-                  'property6', 'customer_rating', 'review', 'main_image',
+                  'property6', 'main_image',
                   'temporary_status', 'photo1',
                   'photo2', 'photo3', 'photo4',
                   ]
@@ -45,8 +45,6 @@ class ProductInfo(forms.ModelForm):
             "property4": "property4",
             "property5": "property5",
             "property6": "property6",
-            "customer_rating": "customer_rating",
-            "review": "review",
             "main_image": "product_main_image",
             "temporary_status": "temporary_status",
             "photo1": "photo1",
@@ -85,9 +83,6 @@ class ProductInfo(forms.ModelForm):
             "category": forms.widgets.Select(attrs={
                 "class": "form-control"
             }),
-            "customer_rating": forms.widgets.Select(attrs={
-                "class": "form-control"
-            }),
             "temporary_status": forms.widgets.Select(attrs={
                 "class": "form-control"
             }),
@@ -102,9 +97,6 @@ class ProductInfo(forms.ModelForm):
             }),
             "photo4": forms.widgets.FileInput(attrs={
                 "class": 'custom-file-input'
-            }),
-            "review": forms.widgets.Textarea(attrs={
-                "class": "form-control"
             }),
         }
         error_messages = {
@@ -155,8 +147,6 @@ class ProductInfoChange(forms.ModelForm):
             "property4": "property4",
             "property5": "property5",
             "property6": "property6",
-            "customer_rating": "customer_rating",
-            "review": "review",
             "main_image": "product_main_image",
             "temporary_status": "temporary_status",
             "photo1": "photo1",
@@ -195,9 +185,6 @@ class ProductInfoChange(forms.ModelForm):
             "category": forms.widgets.Select(attrs={
                 "class": "form-control"
             }),
-            "customer_rating": forms.widgets.Select(attrs={
-                "class": "form-control"
-            }),
             "temporary_status": forms.widgets.Select(attrs={
                 "class": "form-control"
             }),
@@ -212,9 +199,6 @@ class ProductInfoChange(forms.ModelForm):
             }),
             "photo4": forms.widgets.FileInput(attrs={
                 "class": 'custom-file-input'
-            }),
-            "review": forms.widgets.Textarea(attrs={
-                "class": "form-control"
             }),
         }
         error_messages = {

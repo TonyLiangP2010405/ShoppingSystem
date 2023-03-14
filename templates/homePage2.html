@@ -17,12 +17,35 @@
 			    Search
 			</button>
 		</form >
-        <h2>Search Product by inputting product category</h2>
+        <h2>Filter Product by category</h2>
         <form class="d-flex my-4">
-            <input class="form-control me-2" id="category_name" type="text" placeholder="Input Product Category">
-			<button class="btn btn-outline-dark" id="search2" type="button">
-			    Search
-			</button>
+            {% for category in categorys %}
+                <button id="{{ category.category_id }}" class="btn btn-outline-dark">{{ category.name }}</button>
+                <script>
+                    $("#{{ category.category_id }}").click(function () {
+                        $.ajax({
+                            url: '/ajax_filter_category/',
+                            type: "GET",
+                            data: {
+                                "csrfmiddlewaretoken": $("[name = 'csrfmiddlewaretoken']").val(),
+                                "category_id": '{{ category.category_id }}',
+                            },
+                            success(data){
+
+                                if (data["error"]){
+                                    alert("error")
+                                }
+                                else {
+                                    window.location = data['url']
+                                }
+                            },
+                            error(e){
+
+                            }
+                        })
+                    })
+                </script>
+            {% endfor %}
         </form>
         <div>
             <h2>Sort product by price</h2>

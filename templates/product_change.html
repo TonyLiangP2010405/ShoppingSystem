@@ -127,29 +127,6 @@
                 </div>
             </div>
         {% endif %}
-            <div class="mb-3 mt-3">
-                <div id="customer_rating_container" class="col-sm-offset-10">
-                    {{ product.customer_rating }}
-                    <input value="change customer rating" class="btn btn-outline-dark" type="button" id="change_customer_rating">
-                </div>
-            </div>
-
-        {% if product.review|length is 0 %}
-            <div class="mb-3 mt-3">
-                <label for="{{ form_obj.review.id_for_label }}" class="form-label">{{ form_obj.review.label }}</label>
-                <div class="form-control me-2">
-                    {{ form_obj.review }}
-                    <span class="help-block">{{ form_obj.errors.review.0 }}</span>
-                </div>
-            </div>
-        {% else %}
-            <div class="mb-3 mt-3">
-                <div id="review_container" class="col-sm-offset-10">
-                    {{ product.review }}
-                    <input value="change review" class="btn btn-outline-dark" type="button" id="change_review">
-                </div>
-            </div>
-        {% endif %}
         <div class="mb-3 mt-3">
             <div id="temporary_status_container" class="col-sm-offset-10">
                 {{ product.temporary_status }}
@@ -284,16 +261,6 @@
     <script>
         $(document).on('click', '#change_property6', function () {
             $('#property6_container').html('<div class="mb-3 mt-3"> <label for="{{ form_obj.property6.id_for_label }}" class="form-label">{{ form_obj.property6.label }}</label> <div class="col-sm-offset-10">{{ form_obj.property6 }} <span class="help-block">{{ form_obj.errors.property6.0 }}</span> </div> </div>')
-        });
-    </script>
-    <script>
-        $(document).on('click', '#change_customer_rating', function () {
-            $('#customer_rating_container').html('<div class="mb-3 mt-3"> <label for="{{ form_obj.customer_rating.id_for_label }}" class="form-label">{{ form_obj.customer_rating.label }}</label> <div class="col-sm-offset-10">{{ form_obj.customer_rating|escapejs }} <span class="help-block">{{ form_obj.errors.customer_rating.0 }}</span> </div> </div>')
-        });
-    </script>
-    <script>
-        $(document).on('click', '#change_review', function () {
-            $('#review_container').html('<div class="mb-3 mt-3"> <label for="{{ form_obj.review.id_for_label }}" class="form-label">{{ form_obj.review.label }}</label> <div class="col-sm-offset-10">{{ form_obj.review|escapejs }} <span class="help-block">{{ form_obj.errors.review.0 }}</span> </div> </div>')
         });
     </script>
     <script>
