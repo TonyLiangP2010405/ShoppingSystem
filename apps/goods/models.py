@@ -41,8 +41,8 @@ class Product(models.Model):
         (4, "4"),
         (5, "5"),
     )
-    customer_rating = models.IntegerField(choices=rating_choice)
-    review = models.TextField()
+    customer_rating = models.IntegerField(choices=rating_choice, blank=True, null=True)
+    review = models.TextField(blank=True, null=True)
     temporary_status_choice = ((0, "out-of-stock"), (1, "normal"))
     temporary_status = models.IntegerField(choices=temporary_status_choice)
     photo1 = models.ImageField(upload_to="productImage", blank=True)

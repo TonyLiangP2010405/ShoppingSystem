@@ -122,6 +122,7 @@ def change_password(request):
             return render(request, "change_password2.html", {'form_obj': form_obj})
         if request.method == "POST":
             form_obj = UserChangePasswordForm(request.POST, request.FILES)
+            print(form_obj)
             if form_obj.is_valid():
                 uname = request.user.username
                 original_password = request.POST.get("original_password", '')

@@ -9,6 +9,7 @@ from apps.goods.models import Product, ProductsCategory
 # Create your views here.
 def home_page(request):
     datas = Product.objects.all().order_by("product_id")
+    categorys = ProductsCategory.objects.all()
     p = Paginator(datas, 5)
     page_number = request.GET.get('page')
     try:
@@ -17,11 +18,12 @@ def home_page(request):
         page_obj = p.page(1)
     except EmptyPage:
         page_obj = p.page(p.num_pages)
-    return render(request, "homePage2.html", {"products": page_obj})
+    return render(request, "homePage2.html", {"products": page_obj, "categorys": categorys})
 
 
 def home_page_filter(request):
     datas = Product.objects.all().order_by("price")
+    categorys = ProductsCategory.objects.all()
     p = Paginator(datas, 5)
     page_number = request.GET.get('page')
     try:
@@ -30,7 +32,7 @@ def home_page_filter(request):
         page_obj = p.page(1)
     except EmptyPage:
         page_obj = p.page(p.num_pages)
-    return render(request, "homePage2.html", {"products": page_obj})
+    return render(request, "homePage2.html", {"products": page_obj, "categorys": categorys})
 
 
 def ajax_search(request):
@@ -39,16 +41,11 @@ def ajax_search(request):
     return JsonResponse({"url": url})
 
 
-def ajax_search2(request):
-    category_name = request.POST.get("category_name", '')
-    url = "/filter_category_name/?name=" + category_name
-    return JsonResponse({"url": url})
-
-
 def filter_category(request):
-    name = request.GET.get("name", '')
-    if name:
-        datas = Product.objects.filter(category__name=name).order_by("name")
+    category_id = request.GET.get("category_id", '')
+    categorys = ProductsCategory.objects.all()
+    if category_id:
+        datas = Product.objects.filter(category__category_id=category_id).order_by("category_id")
         p = Paginator(datas, 5)
         page_number = request.GET.get('page')
         try:
@@ -57,7 +54,7 @@ def filter_category(request):
             page_obj = p.page(1)
         except EmptyPage:
             page_obj = p.page(p.num_pages)
-        return render(request, "homePage2.html", {"products": page_obj})
+        return render(request, "homePage2.html", {"products": page_obj, "categorys":categorys})
     else:
         datas = Product.objects.all().order_by("product_id")
         p = Paginator(datas, 5)
@@ -71,8 +68,16 @@ def filter_category(request):
         return render(request, "homePage2.html", {"products": page_obj})
 
 
+def ajax_filter_category(request):
+    category_id = request.GET.get("category_id", '')
+    if len(category_id) != 0:
+        return JsonResponse({"url": "/filter_category_name/?category_id="+category_id})
+    else:
+        return JsonResponse({"error": "error"})
+
 def filter_product(request):
     name = request.GET.get("name", '')
+    categorys = ProductsCategory.objects.all()
     if name:
         datas = Product.objects.filter(name=name).order_by("name")
         p = Paginator(datas, 5)
@@ -83,7 +88,7 @@ def filter_product(request):
             page_obj = p.page(1)
         except EmptyPage:
             page_obj = p.page(p.num_pages)
-        return render(request, "homePage2.html", {"products": page_obj})
+        return render(request, "homePage2.html", {"products": page_obj, "categorys": categorys})
     else:
         datas = Product.objects.all().order_by("product_id")
         p = Paginator(datas, 5)
@@ -125,3 +130,4 @@ def add_shipping_address(request):
             shipping_address_dict["receiver_zip"] = receiver_zip
             ShippingAddress.objects.create(**shipping_address_dict)
     return redirect("homePage")
+

@@ -124,8 +124,6 @@ def product_add(request):
             property4 = request.POST.get("property4", '')
             property5 = request.POST.get("property5", '')
             property6 = request.POST.get("property6", '')
-            customer_rating = request.POST.get("customer_rating", '')
-            review = request.POST.get("review", '')
             main_image = request.FILES.get("main_image", '')
             temporary_status = request.POST.get("temporary_status", '')
             photo1 = request.FILES.get("photo1", '')
@@ -148,8 +146,6 @@ def product_add(request):
                 form_obj.cleaned_data["property6"] = property6
                 form_obj.cleaned_data["sale_number"] = 0
                 form_obj.cleaned_data["sale_amount"] = 0
-                form_obj.cleaned_data["customer_rating"] = customer_rating
-                form_obj.cleaned_data["review"] = review
                 form_obj.cleaned_data["main_image"] = main_image
                 form_obj.cleaned_data["temporary_status"] = temporary_status
                 form_obj.cleaned_data["photo1"] = photo1
@@ -184,8 +180,7 @@ def product_change(request, product_id):
         property4 = request.POST.get("property4", '')
         property5 = request.POST.get("property5", '')
         property6 = request.POST.get("property6", '')
-        customer_rating = request.POST.get("customer_rating", '')
-        review = request.POST.get("review", '')
+
         main_image = request.FILES.get("main_image", '')
         temporary_status = request.POST.get("temporary_status", '')
         photo1 = request.FILES.get("photo1", '')
@@ -216,10 +211,6 @@ def product_change(request, product_id):
             form_obj.cleaned_data["property5"] = property5
         if property6:
             form_obj.cleaned_data["property6"] = property6
-        if customer_rating:
-            form_obj.cleaned_data["customer_rating"] = customer_rating
-        if review:
-            form_obj.cleaned_data["review"] = review
         if main_image:
             if old_main_image:
                 image_path = old_main_image.path
@@ -266,7 +257,23 @@ def product_change(request, product_id):
 
 
 def product_delete(request, product_id):
-    Product.objects.filter(product_id=product_id).delete()
+    product = Product.objects.filter(product_id=product_id)[0]
+    if product.main_image:
+        if os.path.exists(product.main_image.path):
+            os.remove(product.main_image.path)
+    if product.photo1:
+        if os.path.exists(product.photo1.path):
+            os.remove(product.photo1.path)
+    if product.photo2:
+        if os.path.exists(product.photo2.path):
+            os.remove(product.photo2.path)
+    if product.photo3:
+        if os.path.exists(product.photo3.path):
+            os.remove(product.photo3.path)
+    if product.photo4:
+        if os.path.exists(product.photo4.path):
+            os.remove(product.photo4.path)
+    product.delete()
     return redirect("products")
 
 
