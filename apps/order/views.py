@@ -247,6 +247,7 @@ def show_vendor_order(request):
 def ajax_shipped(request):
     order_id = request.POST.get("order_id", '')
     order = Order.objects.filter(order_id=order_id)[0]
+    order.purchase_order_status = "shipped"
     order.shipped_date = timezone.now()
     order.save()
     return JsonResponse({"msg": "success"})
