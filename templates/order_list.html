@@ -30,5 +30,6 @@
     {% if order_lists|length is 0 %}
     {% else %}
         <button class="btn btn-outline-dark"><a style="text-decoration:none" href="{% url 'add_order' %}">Buy and Go to order</a></button>
+        <button class="btn btn-outline-dark"><a style="text-decoration:none" href="{% url 'back_shopping_cart' %}">Recover order list to shoppingCart</a></button>
     {% endif %}
 {% endblock %}

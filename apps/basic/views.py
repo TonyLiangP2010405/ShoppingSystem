@@ -79,7 +79,7 @@ def filter_product(request):
     name = request.GET.get("name", '')
     categorys = ProductsCategory.objects.all()
     if name:
-        datas = Product.objects.filter(name=name).order_by("name")
+        datas = Product.objects.filter(name__icontains=name).order_by("name")
         p = Paginator(datas, 5)
         page_number = request.GET.get('page')
         try:

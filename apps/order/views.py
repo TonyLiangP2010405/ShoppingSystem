@@ -302,3 +302,12 @@ def filter_order_past(request):
     orders = Order.objects.filter(purchase_order_status='cancelled') | Order.objects.filter(
         purchase_order_status='shipped').order_by("-purchase_date")
     return render(request, 'order_filter_past.html', {"orders": orders})
+
+
+def back_shopping_cart(request):
+    order_lists = OrderList.objects.all()
+    print(order_lists)
+    for order_list in order_lists:
+        ShoppingCart.objects.create(product=order_list.product, count_number=order_list.total_number, user=MyUser.objects.filter(username=request.user.username)[0])
+        order_list.delete()
+    return redirect('shopping_cart')

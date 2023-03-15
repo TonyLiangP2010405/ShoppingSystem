@@ -80,8 +80,8 @@ def ajax_products(request):
             products = Product.objects.filter(product_id=product_id).order_by("product_id")[
                        (page - 1) * page_size: page * page_size]
         else:
-            total = Product.objects.filter(name=product_name).count()
-            products = Product.objects.filter(name=product_name).order_by("product_id")[
+            total = Product.objects.filter(name__icontains=product_name).count()
+            products = Product.objects.filter(name__icontains=product_name).order_by("product_id")[
                        (page - 1) * page_size: page * page_size]
         rows = []
         for product in products:

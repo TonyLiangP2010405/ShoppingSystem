@@ -14,8 +14,10 @@
                 {% for product in product_list %}
                     <th>product information</th>
                 {% endfor %}
-                <th>shipped</th>
-                <th>hold or unhold</th>
+                {% if request.user.is_superuser %}
+                    <th>shipped</th>
+                    <th>hold or unhold</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -42,20 +44,22 @@
                         <div>subtotal: {{ product.sale_amount }}</div>
                     </td>
                 {% endfor %}
-            {% if order.shipped_date == NULL %}
-                <td><input type="button" id="change_shipped" value="shipped"></td>
-            {% else %}
-                <td>No Process can do</td>
-            {% endif %}
-            {% if order.purchase_order_status == "pending" or order.purchase_order_status == "hold" %}
-                {% if order.purchase_order_status == "pending" %}
-                    <td id="{{ order.order_id }}hold"><input id="{{ order.order_id }}change_hold" type="button" value="change_hold"></td>
+            {% if request.user.is_superuser %}
+                {% if order.shipped_date == NULL %}
+                    <td><input type="button" id="change_shipped" value="shipped"></td>
+                {% else %}
+                    <td>No Process can do</td>
                 {% endif %}
-                {% if order.purchase_order_status == "hold" %}
-                    <td id="{{ order.order_id }}hold"><input id="{{ order.order_id }}change_unhold" type="button" value="change_unhold"></td>
+                {% if order.purchase_order_status == "pending" or order.purchase_order_status == "hold" %}
+                    {% if order.purchase_order_status == "pending" %}
+                        <td id="{{ order.order_id }}hold"><input id="{{ order.order_id }}change_hold" type="button" value="change_hold"></td>
+                    {% endif %}
+                    {% if order.purchase_order_status == "hold" %}
+                        <td id="{{ order.order_id }}hold"><input id="{{ order.order_id }}change_unhold" type="button" value="change_unhold"></td>
+                    {% endif %}
+                {% else %}
+                    <td id="{{ order.order_id }}hold">Cannot use hold or unhold</td>
                 {% endif %}
-            {% else %}
-                <td id="{{ order.order_id }}hold">Cannot use hold or unhold</td>
             {% endif %}
             </tr>
         </tbody>
