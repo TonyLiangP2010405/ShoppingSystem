@@ -4,6 +4,7 @@
     <table class="table table-striped">
         <thead>
             <tr>
+                <th>P.O. number</th>
                 <th>products price</th>
                 <th>products number</th>
                 <th>product</th>
@@ -13,6 +14,7 @@
         <tbody>
             {% for order_list in order_lists %}
                 <tr>
+                    <td>{{ order_list.order.order_id }}</td>
                     <td>{{ order_list.total_price }}</td>
                     <td>{{ order_list.total_number }}</td>
                     <td>{{ order_list.product.name }}</td>

@@ -123,6 +123,8 @@ def show_purchase_order(request):
 def add_purchase_order(request):
     orders = Order.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0])
     order_lists = OrderList.objects.all()
+    print(order_lists)
+    order_id = order_lists[0].order_id
     product_json = {}
     product_list = []
     if len(order_lists) != 0:
@@ -140,9 +142,7 @@ def add_purchase_order(request):
             order.product_json = product_json
             order.save()
             order_lists.delete()
-    return render(request, "purchase_order.html", {
-        "orders": Order.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0]).order_by(
-            '-purchase_date')})
+    return redirect('/purchase_order/order_detail/' + str(order_id))
 
 
 def show_order_list(request):
@@ -151,8 +151,10 @@ def show_order_list(request):
 
 
 def add_order_list(request):
+    status = False
     if len(ShoppingCart.objects.all()) != 0:
         total_price = 0
+        total_number = 0
         count_number = 0
         price = 0
         shopping_carts = ShoppingCart.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0])
@@ -165,23 +167,46 @@ def add_order_list(request):
         else:
             order = Order.objects.filter(user=user)[len(Order.objects.filter(user=user)) - 1]
         for shopping_cart in shopping_carts:
-            order_list_product = shopping_cart.product
-            order_list_product_count = shopping_cart.count_number
-            count_number = order_list_product_count + count_number
-            shopping_cart.product.sale_number = shopping_cart.count_number
-            shopping_cart.product.save()
-            product_price = order_list_product.price * order_list_product_count
-            shopping_cart.product.sale_amount = product_price
-            shopping_cart.product.save()
-            price = product_price + price
-            total_price = total_price + price
-            OrderList.objects.create(total_price=price, total_number=order_list_product_count,
-                                     product=order_list_product,
-                                     order=order)
+            order_lists = OrderList.objects.all()
+            if len(order_lists) != 0:
+                for order_list in order_lists:
+                    total_price = order_list.total_price
+                    total_number = order_list.total_number
+            check_order_list = OrderList.objects.filter(product=shopping_cart.product)
+            if len(check_order_list) == 0:
+                order_list_product = shopping_cart.product
+                order_list_product_count = shopping_cart.count_number
+                count_number = order_list_product_count + count_number
+                shopping_cart.product.sale_number = shopping_cart.count_number
+                shopping_cart.product.save()
+                product_price = order_list_product.price * order_list_product_count
+                shopping_cart.product.sale_amount = product_price
+                shopping_cart.product.save()
+                print(product_price)
+                price = product_price + price
+                total_price = price
+                total_number = total_number + order_list_product_count
+                OrderList.objects.create(total_price=product_price, total_number=order_list_product_count,
+                                         product=order_list_product,
+                                         order=order)
+            else:
+                check_order_list[0].total_number += shopping_cart.count_number
+                check_order_list[0].total_price += shopping_cart.count_number * shopping_cart.product.price
+                shopping_cart.product.sale_number = check_order_list[0].total_number
+                shopping_cart.product.sale_amount = check_order_list[0].total_price
+                check_order_list[0].save()
+                status = True
             shopping_cart.delete()
+        if status:
+            total_price = 0
+            total_number = 0
+            for order_list in OrderList.objects.all():
+                total_price += order_list.total_price
+                total_number += order_list.total_number
+            status = False
         order_lists = OrderList.objects.all()
         return render(request, "order_list.html", {"order_lists": order_lists, "total_price": total_price,
-                                                   "count_number": count_number})
+                                                   "count_number": total_number})
     else:
         return render(request, "order_list.html")
 
@@ -309,8 +334,17 @@ def filter_order_past(request):
 
 def back_shopping_cart(request):
     order_lists = OrderList.objects.all()
-    print(order_lists)
+    shopping_cart_checks = ShoppingCart.objects.all()
     for order_list in order_lists:
-        ShoppingCart.objects.create(product=order_list.product, count_number=order_list.total_number, user=MyUser.objects.filter(username=request.user.username)[0])
+        if len(shopping_cart_checks) != 0:
+            for shopping_cart_check in shopping_cart_checks:
+                if order_list.product.product_id == shopping_cart_check.product.product_id:
+                    shopping_cart_check.count_number += order_list.total_number
+                    shopping_cart_check.save()
+                else:
+                    ShoppingCart.objects.create(product=order_list.product, count_number=order_list.total_number, user=MyUser.objects.filter(username=request.user.username)[0])
+        else:
+            ShoppingCart.objects.create(product=order_list.product, count_number=order_list.total_number,
+                                        user=MyUser.objects.filter(username=request.user.username)[0])
         order_list.delete()
     return redirect('shopping_cart')
