@@ -1,0 +1,6 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block content %}
+    <script> alert('{{ error }}') </script>
+    <button class="btn btn-outline-dark"><a style="text-decoration:none" href="{% url 'product_change' product_id %}">Go back to change again</a></button>
+{% endblock %}

@@ -18,6 +18,8 @@
                     <th>shipped</th>
                     <th>hold or unhold</th>
                 {% endif %}
+                <th>Purchase Date</th>
+                <th>Shipped Address</th>
             </tr>
         </thead>
         <tbody>
@@ -69,6 +71,14 @@
                     <td id="{{ order.order_id }}hold">Cannot use hold or unhold</td>
                 {% endif %}
             {% endif %}
+                <td>Purchase Date: {{ order.purchase_date }}</td>
+                <td>
+                    <div>City: {{ address.receiver_city }}</div>
+                    <div>Province: {{ address.receiver_province }}</div>
+                    <div>Restrict: {{ address.receiver_district }}</div>
+                    <div>Detail address: {{ address.receiver_address }}</div>
+                    <div>Zip: {{ address.receiver_zip }}</div>
+                </td>
             </tr>
         </tbody>
     </table>

@@ -6,6 +6,7 @@ from django.utils import timezone
 from apps.goods.models import Product
 from apps.order.models import ShoppingCart, Order, OrderList
 from apps.users.models import MyUser
+from apps.basic.models import ShippingAddress
 
 
 # Create your views here.
@@ -189,10 +190,11 @@ def show_order_detail(request, order_id):
     order = Order.objects.filter(order_id=order_id)[0]
     product_id_list = order.product_json["product_id_list"]
     product_list = []
+    shipped_address = ShippingAddress.objects.filter(user=order.user)[0]
     for product_id in product_id_list:
         product = Product.objects.filter(product_id=product_id)[0]
         product_list.append(product)
-    return render(request, 'order_detail.html', {"order": order, "product_list": product_list})
+    return render(request, 'order_detail.html', {"order": order, "product_list": product_list, "address": shipped_address})
 
 
 def filter_order_ajax(request):

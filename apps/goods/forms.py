@@ -56,7 +56,7 @@ class ProductInfo(forms.ModelForm):
             "name": forms.widgets.TextInput(attrs={
                 "class": "form-control"
             }),
-            "price": forms.widgets.TextInput(attrs={
+            "price": forms.widgets.NumberInput(attrs={
                 "class": "form-control"
             }),
             "property1": forms.widgets.TextInput(attrs={
@@ -158,7 +158,7 @@ class ProductInfoChange(forms.ModelForm):
             "name": forms.widgets.TextInput(attrs={
                 "class": "form-control"
             }),
-            "price": forms.widgets.TextInput(attrs={
+            "price": forms.widgets.NumberInput(attrs={
                 "class": "form-control"
             }),
             "property1": forms.widgets.TextInput(attrs={
@@ -222,7 +222,6 @@ class ProductInfoChange(forms.ModelForm):
                           'max_length': 'the max length of property6 is 5000'},
             "createDate": {'required': 'the create date of product cannot be empty'},
         },
-
 
 class ProductPhotoChange(forms.ModelForm):
     class Meta:
