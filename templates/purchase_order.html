@@ -52,20 +52,29 @@
                         {% endif %}
                         <td id="{{ order.order_id }}user">{{ order.user.username }}</td>
                         {% if request.user.is_superuser %}
-                            {% if order.shipped_date == NULL %}
+                            {% if order.shipped_date == NULL and order.cancelDate == NULL %}
+
                                 <td id="{{ order.order_id }}shippeddate"><input id="{{ order.order_id }}change_shipped" type="button" value="Shipped"></td>
                             {% else %}
-                                <td id="{{ order.order_id }}shippeddate">the product has been shipped</td>
+                                {% if order.cancelDate == NULL %}
+                                    <td id="{{ order.order_id }}shippeddate">the product has been shipped</td>
+                                {% else %}
+                                    <td id="{{ order.order_id }}shippeddate">The order has been cancelled, doesn't show shipped date</td>
+                                {% endif %}
                             {% endif %}
-                            {% if order.purchase_order_status == "pending" or order.purchase_order_status == "hold" %}
-                                {% if order.purchase_order_status == "pending" %}
-                                    <td id="{{ order.order_id }}hold"><input id="{{ order.order_id }}change_hold" type="button" value="change_hold"></td>
-                                {% endif %}
-                                {% if order.purchase_order_status == "hold" %}
-                                    <td id="{{ order.order_id }}hold"><input id="{{ order.order_id }}change_unhold" type="button" value="change_unhold"></td>
-                                {% endif %}
-                            {% else %}
+                            {% if order.shipped_date != NULL %}
                                 <td id="{{ order.order_id }}hold">Cannot use hold or unhold</td>
+                            {% else %}
+                                {% if order.purchase_order_status == "pending" or order.purchase_order_status == "hold" %}
+                                    {% if order.purchase_order_status == "pending" %}
+                                        <td id="{{ order.order_id }}hold"><input id="{{ order.order_id }}change_hold" type="button" value="change_hold"></td>
+                                    {% endif %}
+                                    {% if order.purchase_order_status == "hold" %}
+                                        <td id="{{ order.order_id }}hold"><input id="{{ order.order_id }}change_unhold" type="button" value="change_unhold"></td>
+                                    {% endif %}
+                                {% else %}
+                                    <td id="{{ order.order_id }}hold">Cannot use hold or unhold</td>
+                                {% endif %}
                             {% endif %}
                         {% endif %}
                     </tr>
