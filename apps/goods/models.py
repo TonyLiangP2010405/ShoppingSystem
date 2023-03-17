@@ -1,6 +1,6 @@
 from datetime import datetime
 from django.db import models
-
+from apps.users.models import MyUser
 
 # Create your models here.
 
@@ -17,6 +17,7 @@ class ProductsCategory(models.Model):
         verbose_name = 'products category'
         verbose_name_plural = 'product categories'
         db_table = 'd_productsCategory'
+
 
 
 class Product(models.Model):
@@ -58,3 +59,4 @@ class Product(models.Model):
         verbose_name = 'product'
         verbose_name_plural = 'products'
         db_table = 'd_product'
+

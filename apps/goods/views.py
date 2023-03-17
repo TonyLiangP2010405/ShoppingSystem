@@ -2,9 +2,12 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect
 from apps.goods.models import Product, ProductsCategory
 from django.http import JsonResponse
+from apps.users.models import MyUser
 from apps.goods.forms import ProductInfo, ProductInfoChange, ProductPhotoChange, ProductsCategoryInfo
 import os
-
+from apps.order.models import ReviewAndRating, Order
+from apps.order.forms import ReviewRatingChangeForm
+from django.utils import timezone
 from shoppingSystem import settings
 
 
@@ -39,8 +42,9 @@ def vendor_product_view(request):
 
 def product_detail(request, product_id):
     product = Product.objects.filter(product_id=product_id)
+    review_ratings = ReviewAndRating.objects.filter(product_id=product_id)
     img_url = product[0].main_image
-    return render(request, "product_detail2.html", {"product": product, "img_url": img_url})
+    return render(request, "product_detail2.html", {"product": product, "img_url": img_url, "review_ratings": review_ratings})
 
 
 def ajax_products(request):
@@ -391,3 +395,41 @@ def add_categories(request):
                 else:
                     ProductsCategory.objects.create(name=category_name)
                     return redirect('category')
+
+
+def edit_review_rating(request, product_id, order_id):
+    if request.method == "GET":
+        user = MyUser.objects.filter(username=request.user.username)[0]
+        check_review_ratings = ReviewAndRating.objects.filter(user=user, product_id=product_id, order=Order.objects.filter(order_id=order_id)[0])
+        if len(check_review_ratings) != 0 and check_review_ratings[len(check_review_ratings) - 1].review_date is not None:
+            return render(request, "change_review_rating.html",
+                          {"info": "You have reviewed and chose the customer rating", "code": 1})
+        else:
+            form_obj = ReviewRatingChangeForm()
+            return render(request, "change_review_rating.html", {"form_obj": form_obj, "code": 0})
+    if request.method == "POST":
+        user = MyUser.objects.filter(username=request.user.username)[0]
+        new_review = ReviewAndRating.objects.create(user=user, product_id=product_id, order=Order.objects.filter(order_id=order_id)[0])
+        review_rating = ReviewAndRating.objects.filter(user=user, product_id=product_id, order=Order.objects.filter(order_id=order_id)[0])[len(ReviewAndRating.objects.filter(user=user, product_id=product_id, order=Order.objects.filter(order_id=order_id)[0]))-1]
+        form_obj = ReviewRatingChangeForm(request.POST, request.FILES)
+        review = request.POST.get("review", '')
+        customer_rating = request.POST.get("customer_rating")
+        print(review)
+        print(customer_rating)
+        if review != "":
+            review_rating.review = review
+            review_rating.save()
+        if customer_rating != "":
+            review_rating.customer_rating = customer_rating
+            review_rating.save()
+        if review != "" or customer_rating != "":
+            review_rating.review_date = timezone.now()
+            review_rating.save()
+        if review == "" and customer_rating == "":
+            new_review.delete()
+        return redirect("/purchase_order/order_detail/" + str(product_id))
+
+
+
+
+

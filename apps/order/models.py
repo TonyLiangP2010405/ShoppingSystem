@@ -59,3 +59,21 @@ class OrderList(models.Model):
     class Meta:
         verbose_name = 'order list'
         db_table = 'd_order_list'
+
+
+class ReviewAndRating(models.Model):
+    review_id = models.IntegerField(primary_key=True)
+    rating_choice = (
+        (0, "0"),
+        (1, "1"),
+        (2, "2"),
+        (3, "3"),
+        (4, "4"),
+        (5, "5"),
+    )
+    customer_rating = models.IntegerField(choices=rating_choice, blank=True, null=True)
+    review = models.TextField(blank=True, null=True)
+    product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(MyUser, on_delete=models.DO_NOTHING)
+    review_date = models.DateTimeField(blank=True, null=True)
+    order = models.ForeignKey(Order, on_delete=models.DO_NOTHING)

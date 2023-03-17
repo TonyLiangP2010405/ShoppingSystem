@@ -16,5 +16,6 @@ urlpatterns = [
     path('categories/', views.get_category, name="category"),
     path('categories/<int:category_id>', views.get_category_detail, name="category_detail"),
     path('categories/add_categories', views.add_categories, name="add_category"),
+    path('customer/edit_review_rating/<int:product_id><int:order_id>', views.edit_review_rating, name="edit_review_rating"),
 ]
 

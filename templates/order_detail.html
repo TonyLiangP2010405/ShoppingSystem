@@ -48,6 +48,12 @@
                         <div>product Number: {{ product.sale_number }}</div>
                         <div>product Price: {{ product.price }}</div>
                         <div>subtotal: {{ product.sale_amount }}</div>
+                        <div>
+                            {% if request.user.is_superuser %}
+                            {% else %}
+                                <button class="btn btn-outline-dark" id="review" type="button"><a style="text-decoration: none" href="{% url 'edit_review_rating' product.product_id order.order_id%}">Edit review and customer rating</a></button>
+                            {% endif %}
+                        </div>
                     </td>
                 {% endfor %}
             {% if request.user.is_superuser %}
