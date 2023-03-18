@@ -57,7 +57,7 @@
                     </td>
                 {% endfor %}
             {% if request.user.is_superuser %}
-                {% if order.shipped_date == NULL %}
+                {% if order.shipped_date == NULL and order.cancelDate == NULL %}
                     <td><input type="button" id="change_shipped" value="shipped"></td>
                 {% else %}
                     <td>No Process can do</td>

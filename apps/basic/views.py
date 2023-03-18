@@ -10,8 +10,8 @@ from apps.goods.models import Product, ProductsCategory
 def home_page(request):
     datas = Product.objects.all().order_by("product_id")
     datas2 = ProductsCategory.objects.all().order_by("category_id")
-    p2 = Paginator(datas2, 5)
-    p = Paginator(datas, 5)
+    p2 = Paginator(datas2, 3)
+    p = Paginator(datas, 3)
     page_number = request.GET.get('page')
     try:
         page_obj = p.get_page(page_number)
@@ -28,8 +28,8 @@ def home_page(request):
 def home_page_filter(request):
     datas = Product.objects.all().order_by("price")
     datas2 = ProductsCategory.objects.all().order_by("category_id")
-    p = Paginator(datas, 5)
-    p2 = Paginator(datas2, 5)
+    p = Paginator(datas, 3)
+    p2 = Paginator(datas2, 3)
     page_number = request.GET.get('page')
     try:
         page_obj = p.get_page(page_number)
@@ -55,8 +55,8 @@ def filter_category(request):
     if category_id:
         datas = Product.objects.filter(category__category_id=category_id).order_by("category_id")
         datas2 = ProductsCategory.objects.all().order_by('category_id')
-        p = Paginator(datas, 5)
-        p2 = Paginator(datas2, 5)
+        p = Paginator(datas, 3)
+        p2 = Paginator(datas2, 3)
         page_number = request.GET.get('page')
         try:
             page_obj = p.get_page(page_number)
@@ -67,12 +67,12 @@ def filter_category(request):
         except EmptyPage:
             page_obj = p.page(p.num_pages)
             page_obj2 = p2.page(p2.num_pages)
-        return render(request, "homePage2.html", {"products": page_obj, "categorys":page_obj2})
+        return render(request, "homepage_category_filter.html", {"products": page_obj, "categorys": page_obj2, "category_id": category_id})
     else:
         datas = Product.objects.all().order_by("product_id")
         datas2 = ProductsCategory.objects.all().order_by('category_id')
-        p = Paginator(datas, 5)
-        p2 = Paginator(datas2, 5)
+        p = Paginator(datas, 3)
+        p2 = Paginator(datas2, 3)
         page_number = request.GET.get('page')
         try:
             page_obj = p.get_page(page_number)
@@ -98,20 +98,25 @@ def filter_product(request):
     categorys = ProductsCategory.objects.all()
     if name:
         datas = Product.objects.filter(name__icontains=name).order_by("name")
-        p = Paginator(datas, 5)
+        datas2 = ProductsCategory.objects.all().order_by('category_id')
+        p = Paginator(datas, 3)
+        p2 = Paginator(datas2, 3)
         page_number = request.GET.get('page')
         try:
             page_obj = p.get_page(page_number)
+            page_obj2 = p2.get_page(page_number)
         except PageNotAnInteger:
             page_obj = p.page(1)
+            page_obj2 = p2.page(1)
         except EmptyPage:
             page_obj = p.page(p.num_pages)
-        return render(request, "homePage2.html", {"products": page_obj, "categorys": categorys})
+            page_obj2 = p2.page(p2.num_pages)
+        return render(request, "homePage2.html", {"products": page_obj, "categorys": page_obj2})
     else:
         datas = Product.objects.all().order_by("product_id")
         datas2 = ProductsCategory.objects.all().order_by('category_id')
-        p = Paginator(datas, 5)
-        p2 = Paginator(datas2, 5)
+        p = Paginator(datas, 3)
+        p2 = Paginator(datas2, 3)
         page_number = request.GET.get('page')
         try:
             page_obj = p.get_page(page_number)
