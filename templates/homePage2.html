@@ -57,7 +57,7 @@
         {% for product in products %}
             <div class="card m-2">
                 <a href="{% url 'product_detail' product.product_id %}">
-                    <img src="/media/{{ product.main_image }}"  class="card-img-top" height="300" alt="Product">
+                    <img src="/media/{{ product.main_image }}"  class="card-img-top" width="200" height="300" alt="Product">
                 </a>
                 <div class="card-body">
                     <p class="card-text fw-bold">{{ product.name }}</p>

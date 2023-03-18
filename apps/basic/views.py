@@ -22,7 +22,7 @@ def home_page(request):
     except EmptyPage:
         page_obj = p.page(p.num_pages)
         page_obj2 = p2.page(p2.num_pages)
-    return render(request, "homePage2.html", {"products": page_obj, "categorys": page_obj2})
+    return render(request, "homePage2.html", {"products": page_obj, "categorys": datas2})
 
 
 def home_page_filter(request):
@@ -40,7 +40,7 @@ def home_page_filter(request):
     except EmptyPage:
         page_obj = p.page(p.num_pages)
         page_obj2 = p2.page(p.num_pages)
-    return render(request, "homePage2.html", {"products": page_obj, "categorys": page_obj2})
+    return render(request, "homePage2.html", {"products": page_obj, "categorys": datas2})
 
 
 def ajax_search(request):
@@ -67,7 +67,7 @@ def filter_category(request):
         except EmptyPage:
             page_obj = p.page(p.num_pages)
             page_obj2 = p2.page(p2.num_pages)
-        return render(request, "homepage_category_filter.html", {"products": page_obj, "categorys": page_obj2, "category_id": category_id})
+        return render(request, "homepage_category_filter.html", {"products": page_obj, "categorys": datas2, "category_id": category_id})
     else:
         datas = Product.objects.all().order_by("product_id")
         datas2 = ProductsCategory.objects.all().order_by('category_id')
@@ -83,7 +83,7 @@ def filter_category(request):
         except EmptyPage:
             page_obj = p.page(p.num_pages)
             page_obj2 = p2.page(p2.num_pages)
-        return render(request, "homePage2.html", {"products": page_obj, "categorys": page_obj2})
+        return render(request, "homePage2.html", {"products": page_obj, "categorys": datas2})
 
 
 def ajax_filter_category(request):
@@ -111,7 +111,7 @@ def filter_product(request):
         except EmptyPage:
             page_obj = p.page(p.num_pages)
             page_obj2 = p2.page(p2.num_pages)
-        return render(request, "homePage2.html", {"products": page_obj, "categorys": page_obj2})
+        return render(request, "homePage2.html", {"products": page_obj, "categorys": datas2})
     else:
         datas = Product.objects.all().order_by("product_id")
         datas2 = ProductsCategory.objects.all().order_by('category_id')
@@ -127,7 +127,7 @@ def filter_product(request):
         except EmptyPage:
             page_obj = p.page(p.num_pages)
             page_obj2 = p2.page(p2.num_pages)
-        return render(request, "homePage2.html", {"products": page_obj, "categorys": page_obj2})
+        return render(request, "homePage2.html", {"products": page_obj, "categorys": datas2})
 
 
 def add_shipping_address(request):
