@@ -44,6 +44,7 @@
           </div>
           <div class="col-12 col-lg-6">
             <h2 id="productName">{{ product.0.name }}</h2>
+            <div class="text-muted">brand: {{ product.0.category.name }}</div>
             <div class="text-muted">property1: {{ product.0.property1 }}</div>
               <div class="text-muted">property2: {{ product.0.property2 }}</div>
               {% if product.0.property3 == NULL %}

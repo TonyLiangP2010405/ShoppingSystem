@@ -12,8 +12,13 @@ from apps.basic.models import ShippingAddress
 # Create your views here.
 def show_shopping_cart(request):
     if request.user.is_authenticated:
-        shopping_cart = ShoppingCart.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0])
-        return render(request, "ShoppingCart.html", {"shopping_cart": shopping_cart})
+        shopping_carts = ShoppingCart.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0])
+        total_amount = 0
+        total_number = 0
+        for shopping_cart in shopping_carts:
+            total_amount += shopping_cart.count_number * shopping_cart.product.price
+            total_number += shopping_cart.count_number
+        return render(request, "ShoppingCart.html", {"shopping_cart": shopping_carts, "total_number": total_number, "total_amount": total_amount})
     else:
         return redirect('login')
 
@@ -180,7 +185,7 @@ def add_order_list(request):
                 shopping_cart.product.sale_number = shopping_cart.count_number
                 shopping_cart.product.save()
                 product_price = order_list_product.price * order_list_product_count
-                shopping_cart.product.sale_amount = product_price
+                shopping_cart.product.sale_amount = shopping_cart.count_number * shopping_cart.product.price
                 shopping_cart.product.save()
                 print(product_price)
                 price = product_price + price
@@ -212,14 +217,16 @@ def add_order_list(request):
 
 
 def show_order_detail(request, order_id):
+    total_quantity = 0
     order = Order.objects.filter(order_id=order_id)[0]
     product_id_list = order.product_json["product_id_list"]
     product_list = []
     shipped_address = ShippingAddress.objects.filter(user=order.user)[0]
     for product_id in product_id_list:
         product = Product.objects.filter(product_id=product_id)[0]
+        total_quantity += product.sale_number
         product_list.append(product)
-    return render(request, 'order_detail.html', {"order": order, "product_list": product_list, "address": shipped_address})
+    return render(request, 'order_detail.html', {"order": order, "product_list": product_list, "address": shipped_address, "total_quantity": total_quantity})
 
 
 def filter_order_ajax(request):

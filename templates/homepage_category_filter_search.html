@@ -29,7 +29,7 @@
                             data: {
                                 "csrfmiddlewaretoken": $("[name = 'csrfmiddlewaretoken']").val(),
                                 "category_id": '{{ category.category_id }}',
-                                "name": '{{ name }}',
+                                "name": '{{ name }}'
                             },
                             success(data){
 
@@ -47,12 +47,12 @@
                     })
                 </script>
             {% endfor %}
-        <button class="btn btn-outline-dark"><a style="text-decoration: none" href="/filter_product_name/?name={{ name }}">show all category product</a></button>
         </form>
+        <button class="btn btn-outline-dark"><a style="text-decoration: none" href="/filter_product_name/?name={{ name }}">show all category product</a></button>
         <div>
             <h2>Sort product by price</h2>
-            <button class="btn btn-outline-dark"><a href="/filter_search_price_homepage/?name={{ name }}&category_id={{ category_id }}" style="text-decoration:none">Sort</a></button>
-            <button class="btn btn-outline-dark"><a href="/filter_search_price_homepage_desc/?name={{ name }}&category_id={{ category_id }}" style="text-decoration:none">Sort by DESC</a></button>
+            <button class="btn btn-outline-dark"><a href="/filter_search_price_homepage/?category_id={{ category_id }}&name={{ name }}" style="text-decoration:none">Sort</a></button>
+            <button class="btn btn-outline-dark"><a href="/filter_search_price_homepage_desc/?category_id={{ category_id }}&name={{ name }}" style="text-decoration:none">Sort by DESC</a></button>
         </div>
     </section>
         <h2 class="display-6 py-5">Product List</h2>

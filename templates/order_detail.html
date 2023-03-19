@@ -6,6 +6,7 @@
         <thead>
             <tr>
                 <th>order_id</th>
+                <th>total_quantity</th>
                 <th>total_order_amount</th>
                 <th>purchase_order_status</th>
                 <th>shipped_date</th>
@@ -25,6 +26,7 @@
         <tbody>
             <tr>
                 <td>{{ order.order_id }}</td>
+                <td>{{ total_quantity }}</td>
                 <td>{{ order.total_order_amount }}</td>
                 <td>{{ order.purchase_order_status }}</td>
                 {% if order.shipped_date == NULL %}
@@ -37,7 +39,13 @@
                     {% endif %}
                 {% endif %}
                 {% if order.cancelDate == NULL %}
-                    <td id="{{ order.order_id }}cancelled">No cancelled Date <input type="button" value="cancel" id="{{ order.order_id }}cancel"></td>
+                    <td id="{{ order.order_id }}cancelled">
+                        No cancelled Date
+                        {% if order.purchase_order_status == "shipped" %}
+                            You cannot do cancel process, it has been shipped
+                        {% else %}
+                            <input type="button" value="cancel" id="{{ order.order_id }}cancel"></td>
+                        {% endif %}
                 {% else %}
                     <td id="{{ order.order_id }}cancelled">{{ order.cancel_user_type }} {{ order.cancelDate }}</td>
                 {% endif %}
@@ -45,7 +53,7 @@
                 {% for product in product_list %}
                     <td>
                         <div>product Name: {{ product.name }}</div>
-                        <div>product Number: {{ product.sale_number }}</div>
+                        <div>product Quantity: {{ product.sale_number }}</div>
                         <div>product Price: {{ product.price }}</div>
                         <div>subtotal: {{ product.sale_amount }}</div>
                         <div>

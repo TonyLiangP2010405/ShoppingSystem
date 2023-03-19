@@ -51,8 +51,8 @@
         </form>
         <div>
             <h2>Sort product by price</h2>
-            <button class="btn btn-outline-dark"><a href="/filter_search_price_homepage/?name={{ name }}&category_id={{ category_id }}" style="text-decoration:none">Sort</a></button>
-            <button class="btn btn-outline-dark"><a href="/filter_search_price_homepage_desc/?name={{ name }}&category_id={{ category_id }}" style="text-decoration:none">Sort by DESC</a></button>
+            <button class="btn btn-outline-dark"><a href="/filter_search_price_homepage/?category_id={{ category_id }}&name={{ name }}" style="text-decoration:none">Sort</a></button>
+            <button class="btn btn-outline-dark"><a href="/filter_search_price_homepage/?category_id={{ category_id }}&name={{ name }}" style="text-decoration:none">Sort by DESC</a></button>
         </div>
     </section>
         <h2 class="display-6 py-5">Product List</h2>
@@ -60,7 +60,7 @@
         {% for product in products %}
             <div class="card m-2">
                 <a href="{% url 'product_detail' product.product_id %}">
-                    <img src="/media/{{ product.main_image }}"  class="card-img-top" height="300" alt="Product">
+                    <img src="/media/{{ product.main_image }}"  class="card-img-top" width="200" height="300" alt="Product">
                 </a>
                 <div class="card-body">
                     <p class="card-text fw-bold">{{ product.name }}</p>
@@ -76,7 +76,7 @@
         <ul class="pagination justify-content-center m-2">
             {% if products.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?category_id={{ category_id }}&name={{ name }}&page={{ products.previous_page_number }}">
+                    <a class="page-link" href="?name={{ name }}&page={{ products.previous_page_number }}">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
@@ -88,7 +88,7 @@
                     </li>
                 {% else %}
                     <li class="page-item">
-                        <a class="page-link" href="?category_id={{ category_id }}&name={{ name }}&page={{ pg }}">
+                        <a class="page-link" href="?name={{ name }}&page={{ pg }}">
                             {{ pg }}
                         </a>
                     </li>
@@ -96,7 +96,7 @@
             {% endfor %}
             {% if products.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?category_id={{ category_id }}&name={{ name }}&page={{ products.next_page_number }}">
+                    <a class="page-link" href="?name={{ name }}&page={{ products.next_page_number }}">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
@@ -113,7 +113,6 @@
                 data: {
                    "csrfmiddlewaretoken": $("[name = 'csrfmiddlewaretoken']").val(),
                     "product_name": $("#product_name").val(),
-                    "category_id": '{{ category_id }}',
                 },
                 success(data){
                     window.location = data["url"]

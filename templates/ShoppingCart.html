@@ -2,6 +2,12 @@
 {% load static %}
 {% block content %}
     {% csrf_token %}
+    <div>
+        total_number: {{ total_number }}
+    </div>
+    <div>
+        total_amount: {{ total_amount }}
+    </div>
     <table class="table table-striped">
         <thead>
             <tr>
