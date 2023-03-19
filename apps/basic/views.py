@@ -43,6 +43,24 @@ def home_page_filter(request):
     return render(request, "homePage2.html", {"products": page_obj, "categorys": datas2})
 
 
+def home_page_filter_desc(request):
+    datas = Product.objects.all().order_by("-price")
+    datas2 = ProductsCategory.objects.all().order_by("category_id")
+    p = Paginator(datas, 3)
+    p2 = Paginator(datas2, 3)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = p.get_page(page_number)
+        page_obj2 = p2.get_page(page_number)
+    except PageNotAnInteger:
+        page_obj = p.page(1)
+        page_obj2 = p2.page(1)
+    except EmptyPage:
+        page_obj = p.page(p.num_pages)
+        page_obj2 = p2.page(p.num_pages)
+    return render(request, "homePage2.html", {"products": page_obj, "categorys": datas2})
+
+
 def ajax_search(request):
     product_name = request.POST.get("product_name", '')
     url = "/filter_product_name/?name=" + product_name
