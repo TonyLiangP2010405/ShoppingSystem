@@ -86,6 +86,44 @@ def filter_category(request):
         return render(request, "homePage2.html", {"products": page_obj, "categorys": datas2})
 
 
+def filter_category_price_homepage(request):
+    category_id = request.GET.get("category_id", '')
+    datas = Product.objects.filter(category__category_id=category_id).order_by("price")
+    datas2 = ProductsCategory.objects.all().order_by("category_id")
+    p = Paginator(datas, 3)
+    p2 = Paginator(datas2, 3)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = p.get_page(page_number)
+        page_obj2 = p2.get_page(page_number)
+    except PageNotAnInteger:
+        page_obj = p.page(1)
+        page_obj2 = p2.page(1)
+    except EmptyPage:
+        page_obj = p.page(p.num_pages)
+        page_obj2 = p2.page(p.num_pages)
+    return render(request, "homepage_category_filter.html", {"products": page_obj, "categorys": datas2, "category_id": category_id})
+
+
+def filter_category_price_homepage_desc(request):
+    category_id = request.GET.get("category_id", '')
+    datas = Product.objects.filter(category__category_id=category_id).order_by("-price")
+    datas2 = ProductsCategory.objects.all().order_by("category_id")
+    p = Paginator(datas, 3)
+    p2 = Paginator(datas2, 3)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = p.get_page(page_number)
+        page_obj2 = p2.get_page(page_number)
+    except PageNotAnInteger:
+        page_obj = p.page(1)
+        page_obj2 = p2.page(1)
+    except EmptyPage:
+        page_obj = p.page(p.num_pages)
+        page_obj2 = p2.page(p.num_pages)
+    return render(request, "homepage_category_filter.html", {"products": page_obj, "categorys": datas2, "category_id": category_id})
+
+
 def ajax_filter_category(request):
     category_id = request.GET.get("category_id", '')
     if len(category_id) != 0:

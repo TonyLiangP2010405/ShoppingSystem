@@ -10,4 +10,6 @@ urlpatterns = [
     path('filter_product_name/', views.filter_product, name='filter_product_name'),
     path('filter_category_name/', views.filter_category, name='filter_category_name'),
     path('ajax_filter_category/', views.ajax_filter_category),
+    path('filter_category_price/', views.filter_category_price_homepage, name='homepage_filter_category_price'),
+    path('filter_category_price_desc/', views.filter_category_price_homepage_desc, name='homepage_filter_category_price_desc'),
 ]
