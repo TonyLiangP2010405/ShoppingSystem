@@ -49,7 +49,7 @@ def home_page_filter(request):
 
 def home_page_filter_desc(request):
     datas = Product.objects.all().order_by("-price")
-    datas2 = ProductsCategory.objects.all().order_by("category_id")
+    datas2 = ProductsCategory.objects.all().distinct().order_by("category_id")
     p = Paginator(datas, 3)
     p2 = Paginator(datas2, 3)
     page_number = request.GET.get('page')
@@ -304,7 +304,7 @@ def filter_category(request):
     if category_id:
         if name == '':
             datas = Product.objects.filter(category__category_id=category_id).order_by("category_id")
-            datas2 = ProductsCategory.objects.all().order_by('category_id')
+            datas2 = ProductsCategory.objects.all().distinct().order_by('category_id')
         else:
             datas = Product.objects.filter(category__category_id=category_id, name__icontains=name).order_by(
                 "category_id")
@@ -349,7 +349,7 @@ def filter_category(request):
 def filter_category_price_homepage(request):
     category_id = request.GET.get("category_id", '')
     datas = Product.objects.filter(category__category_id=category_id).order_by("price")
-    datas2 = ProductsCategory.objects.all().order_by("category_id")
+    datas2 = ProductsCategory.objects.all().distinct().order_by("category_id")
     p = Paginator(datas, 3)
     p2 = Paginator(datas2, 3)
     page_number = request.GET.get('page')
@@ -369,7 +369,7 @@ def filter_category_price_homepage(request):
 def filter_category_price_homepage_desc(request):
     category_id = request.GET.get("category_id", '')
     datas = Product.objects.filter(category__category_id=category_id).order_by("-price")
-    datas2 = ProductsCategory.objects.all().order_by("category_id")
+    datas2 = ProductsCategory.objects.all().distinct().order_by("category_id")
     p = Paginator(datas, 3)
     p2 = Paginator(datas2, 3)
     page_number = request.GET.get('page')
@@ -424,7 +424,7 @@ def filter_product(request):
         return render(request, "filter_name_homePage.html", {"products": page_obj, "categorys": datas2, "name": name})
     else:
         datas = Product.objects.all().order_by("product_id")
-        datas2 = ProductsCategory.objects.all().order_by('category_id')
+        datas2 = ProductsCategory.objects.all().distinct().order_by('category_id')
         p = Paginator(datas, 3)
         p2 = Paginator(datas2, 3)
         page_number = request.GET.get('page')
