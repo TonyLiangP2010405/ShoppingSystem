@@ -47,7 +47,7 @@
                         <td id="{{ order.order_id }}date">{{ order.purchase_date }}</td>
                         {% if order.cancelDate == NULL %}
                                 <td id="{{ order.order_id }}cancelled">
-                                    No cancelled Data
+                                    No cancelled Date
                                     {% if order.purchase_order_status == "shipped" %}
                                         You cannot do cancel process, it has been shipped
                                     {% else %}

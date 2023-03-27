@@ -47,7 +47,14 @@
                             <td id="{{ order.order_id }}status">{{ order.purchase_order_status }}</td>
                             <td id="{{ order.order_id }}date">{{ order.purchase_date }}</td>
                             {% if order.cancelDate == NULL %}
-                                <td id="{{ order.order_id }}cancelled">No cancelled Data <input type="button" value="cancel" id="{{ order.order_id }}cancel"></td>
+                                <td id="{{ order.order_id }}cancelled">
+                                    No cancelled Date
+                                    {% if order.purchase_order_status == "shipped" %}
+                                        You cannot do cancel process, it has been shipped
+                                    {% else %}
+                                        <input type="button" value="cancel" id="{{ order.order_id }}cancel">
+                                    {% endif %}
+                                </td>
                             {% else %}
                                 <td id="{{ order.order_id }}cancelled">{{ order.cancel_user_type }} {{ order.cancelDate }}</td>
                             {% endif %}

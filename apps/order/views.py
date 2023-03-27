@@ -328,14 +328,18 @@ def filter_order_hold(request):
 
 
 def filter_order_current(request):
-    orders = Order.objects.filter(purchase_order_status='pending') | Order.objects.filter(
+    orders = Order.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0], purchase_order_status='pending') | Order.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0],
         purchase_order_status='hold').order_by("-purchase_date")
     return render(request, 'order_filter_current.html', {"orders": orders})
 
 
 def filter_order_past(request):
-    orders = Order.objects.filter(purchase_order_status='cancelled') | Order.objects.filter(
-        purchase_order_status='shipped').order_by("-purchase_date")
+    if request.user.is_superuser:
+        orders = Order.objects.filter(purchase_order_status='cancelled') | Order.objects.filter(
+            purchase_order_status='shipped').order_by("-purchase_date")
+    else:
+        orders = Order.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0],purchase_order_status='cancelled') | Order.objects.filter(
+            user=MyUser.objects.filter(username=request.user.username)[0], purchase_order_status='shipped').order_by("-purchase_date")
     return render(request, 'order_filter_past.html', {"orders": orders})
 
 
