@@ -40,7 +40,7 @@
                     {% else %}
                         <tr id="tr">
                             <td class="check"  id="{{ order.order_id }}" data-url="{% url 'order_detail' order.order_id%}"><a href="{% url 'order_detail' order.order_id%}">{{ order.order_id }}</a></td>
-                            {% if order.shipped_date == NULL %}
+                            {% if order.shipped_date == NULL  %}
                                 <td id="{{ order.order_id }}shipped">No shipped date</td>
                             {% else %}
                                 <td id="{{ order.order_id }}shipped">{{ order.shipped_date }}</td>
@@ -63,7 +63,11 @@
                             <td id="{{ order.order_id }}user">{{ order.user.username }}</td>
                             {% if request.user.is_superuser %}
                                 {% if order.shipped_date == NULL %}
-                                    <td id="{{ order.order_id }}shippeddate"><input id="{{ order.order_id }}change_shipped" type="button" value="Shipped"></td>
+                                    {% if order.purchase_order_status != "cancelled" %}
+                                        <td id="{{ order.order_id }}shippeddate"><input id="{{ order.order_id }}change_shipped" type="button" value="Shipped"></td>
+                                    {% else %}
+                                        <td id="{{ order.order_id }}shippeddate">The product has been cancelled, Cannot do shipped process</td>
+                                    {% endif %}
                                 {% else %}
                                     <td id="{{ order.order_id }}shippeddate">the product has been shipped</td>
                                 {% endif %}
