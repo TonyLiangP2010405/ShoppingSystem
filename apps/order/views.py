@@ -339,7 +339,7 @@ def filter_order_past(request):
             purchase_order_status='shipped').order_by("-purchase_date")
     else:
         orders = Order.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0],purchase_order_status='cancelled') | Order.objects.filter(
-            user=MyUser.objects.filter(username=request.user.username)[0], purchase_order_status='shipped').order_by("-purchase_date")
+            user=MyUser.objects.filter(username=request.user.username)[0], bvpurchase_order_status='shipped').order_by("-purchase_date")
     return render(request, 'order_filter_past.html', {"orders": orders})
 
 
