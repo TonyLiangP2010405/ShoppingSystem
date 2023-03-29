@@ -20,18 +20,16 @@
         <h2>Filter Product by category</h2>
         <form class="d-flex my-4">
             {% for category in categorys %}
-                <button id="{{ category.category_id }}" class="btn btn-outline-dark">{{ category.name }}</button>
+                <input id="{{ category.category_id }}" class="btn btn-outline-dark" value="{{ category.name }}">
                 <script>
                     $("#{{ category.category_id }}").click(function () {
                         $.ajax({
                             url: '/ajax_filter_category/',
                             type: "GET",
                             data: {
-                                "csrfmiddlewaretoken": $("[name = 'csrfmiddlewaretoken']").val(),
                                 "category_id": '{{ category.category_id }}',
                             },
                             success(data){
-
                                 if (data["error"]){
                                     alert("error")
                                 }
@@ -104,6 +102,7 @@
     </nav>
 
     </div>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
     <script>
         $("#search").click(function () {
             $.ajax({

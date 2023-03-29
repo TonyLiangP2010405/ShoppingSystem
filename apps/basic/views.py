@@ -1,3 +1,5 @@
+import time
+
 from django.core.paginator import PageNotAnInteger, Paginator, EmptyPage
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
