@@ -44,15 +44,15 @@ class UserRegForm(forms.Form):
                             })
 
     def clean_username(self):
-        new_username = self.cleaned_data.get("username")
+        new_username = self.cleaned_data.get("username", "")
         users = MyUser.objects.all()
         for user in users:
             if user.username == new_username:
                 self.add_error("username", ValidationError("the username has been existed"))
 
     def clean(self):
-        password = self.cleaned_data.get("password")
-        re_password = self.cleaned_data.get("re_password")
+        password = self.cleaned_data.get("password", "")
+        re_password = self.cleaned_data.get("re_password", "")
         if len(password) < 6:
             self.add_error("re_password", ValidationError("The password should at least 6 digital "))
         if len(re_password) < 6:
@@ -104,9 +104,15 @@ class UserChangePasswordForm(forms.Form):
                                       'min_length': 'the length of password at least is 6 digit'})
 
     def clean(self):
-        original_password = self.cleaned_data.get("original_password")
-        password = self.cleaned_data.get("new_password")
-        re_password = self.cleaned_data.get("re_password")
+        original_password = self.cleaned_data.get("original_password", '')
+        password = self.cleaned_data.get("new_password", '')
+        re_password = self.cleaned_data.get("re_password", '')
+        if original_password == "":
+            self.add_error("original_password", ValidationError("The original_password is empty"))
+        if password == "":
+            self.add_error("re_password", ValidationError("The new password is empty"))
+        if re_password == "":
+            self.add_error("re_password", ValidationError("The repeat new password is empty"))
         if len(password) < 6:
             self.add_error("re_password", ValidationError("The password should at least 6 digital "))
         if len(re_password) < 6:

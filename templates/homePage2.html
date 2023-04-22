@@ -20,7 +20,7 @@
         <h2>Filter Product by category</h2>
         <form class="d-flex my-4">
             {% for category in categorys %}
-                <input id="{{ category.category_id }}" class="btn btn-outline-dark" value="{{ category.name }}">
+                <input id="{{ category.category_id }}" class="btn btn-outline-dark" value="{{ category.name }}" style="width: 100px; height: 100px">
                 <script>
                     $("#{{ category.category_id }}").click(function () {
                         $.ajax({
@@ -44,7 +44,7 @@
                     })
                 </script>
             {% endfor %}
-        <button class="btn btn-outline-dark"><a style="text-decoration: none" href="{% url 'homePage' %}">show all category product</a></button>
+        <button class="btn btn-outline-dark" style="width: 100px; height: 100px"><a style="text-decoration: none" href="{% url 'homePage' %}">show all category product</a></button>
         </form>
         <div>
             <h2>Sort product by price</h2>

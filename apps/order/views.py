@@ -18,6 +18,8 @@ def show_shopping_cart(request):
         for shopping_cart in shopping_carts:
             total_amount += shopping_cart.count_number * shopping_cart.product.price
             total_number += shopping_cart.count_number
+            shopping_cart.product.sale_amount = shopping_cart.count_number * shopping_cart.product.price
+            shopping_cart.product.save()
         return render(request, "ShoppingCart.html", {"shopping_cart": shopping_carts, "total_number": total_number, "total_amount": total_amount})
     else:
         return redirect('login')
@@ -101,15 +103,19 @@ def ajax_login_data(request):
                 else:
                     json_dict["code"] = 1001
                     json_dict["msg"] = "the user doesn't active"
+                    json_dict["url"] = '/shoppingCart/user_login/' + product_id
             else:
                 json_dict["code"] = 1002
                 json_dict["msg"] = "the password is wrong, please try again"
+                json_dict["url"] = '/shoppingCart/user_login/' + product_id
         else:
             json_dict["code"] = 1003
             json_dict["msg"] = "the username is wrong, please try again"
+            json_dict["url"] = '/shoppingCart/user_login/' + product_id
     else:
         json_dict["code"] = 1004
         json_dict["msg"] = "the username or password is empty"
+        json_dict["url"] = '/shoppingCart/user_login/' + product_id
     return JsonResponse(json_dict)
 
 
@@ -339,7 +345,7 @@ def filter_order_past(request):
             purchase_order_status='shipped').order_by("-purchase_date")
     else:
         orders = Order.objects.filter(user=MyUser.objects.filter(username=request.user.username)[0],purchase_order_status='cancelled') | Order.objects.filter(
-            user=MyUser.objects.filter(username=request.user.username)[0], bvpurchase_order_status='shipped').order_by("-purchase_date")
+            user=MyUser.objects.filter(username=request.user.username)[0], purchase_order_status='shipped').order_by("-purchase_date")
     return render(request, 'order_filter_past.html', {"orders": orders})
 
 

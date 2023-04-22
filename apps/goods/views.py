@@ -398,6 +398,8 @@ def add_categories(request):
 
 
 def edit_review_rating(request, product_id, order_id):
+    print(product_id)
+    print(order_id)
     if request.method == "GET":
         user = MyUser.objects.filter(username=request.user.username)[0]
         check_review_ratings = ReviewAndRating.objects.filter(user=user, product_id=product_id, order=Order.objects.filter(order_id=order_id)[0])
@@ -427,7 +429,7 @@ def edit_review_rating(request, product_id, order_id):
             review_rating.save()
         if review == "" and customer_rating == "":
             new_review.delete()
-        return redirect("/purchase_order/order_detail/" + str(product_id))
+        return redirect("/purchase_order/order_detail/" + str(order_id))
 
 
 

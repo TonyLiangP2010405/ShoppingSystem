@@ -390,10 +390,6 @@ def filter_category_price_homepage_desc(request):
 
 def ajax_filter_category(request):
     category_id = request.GET.get("category_id", '')
-    print("aaaaa")
-    print(category_id)
-    print(request.POST)
-    print(request.GET)
     name = request.GET.get("name", '')
     if len(category_id) != 0:
         if name == "":
